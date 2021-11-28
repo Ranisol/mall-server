@@ -1,5 +1,7 @@
 package com.narea.mall.exception
 
+import io.jsonwebtoken.ExpiredJwtException
+import io.jsonwebtoken.MalformedJwtException
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.converter.HttpMessageNotReadableException
@@ -82,6 +84,8 @@ class ExceptionController {
     @ExceptionHandler(BadCredentialsException::class)
     fun handleAccessBadCredentialsException(e: BadCredentialsException): MallErrorResponse =
         MallErrorResponse.create(e)
+
+
 
     data class MallErrorResponse(
         val exception: String,

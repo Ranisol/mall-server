@@ -2,6 +2,7 @@ package com.narea.mall.backend.api.controller
 
 
 import com.narea.mall.LoginRequest
+import com.narea.mall.ReissueRequest
 import com.narea.mall.UserCreateRequest
 import com.narea.mall.service.AuthService
 import com.narea.mall.service.UserService
@@ -31,7 +32,10 @@ class AuthController(
     ) = userService.createUser(userCreateRequest)
 
     @PostMapping("/reissue")
-    fun reissue() = {}
+    fun reissue(
+        @RequestBody @Valid
+        reissueRequest: ReissueRequest
+    ) = authService.reissue(reissueRequest)
 
     @PostMapping("/logout")
     fun logout() {}

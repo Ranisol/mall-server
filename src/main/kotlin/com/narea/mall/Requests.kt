@@ -18,6 +18,7 @@ data class ReissueRequest(
     var refreshToken:String
 )
 
+
 data class UserCreateRequest(
     @field:NotBlank(message = NOT_BE_EMPTY)
     var name: String = EMPTY_STRING,

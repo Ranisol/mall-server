@@ -23,8 +23,8 @@ class JwtTokenProvider(@Value("\${jwt.secret}") secretKey: String) {
     companion object {
 
         private const val ROLES = "roles"
-        private const val ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30 // 30분
-        private const val REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7 // 7일
+        private const val ACCESS_TOKEN_EXPIRE_TIME = 1000 * 20
+        private const val REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 10
     }
 
     private val key: Key = Keys.hmacShaKeyFor(
