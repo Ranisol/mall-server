@@ -1,1 +1,1 @@
-rootProject.name = "spring-security-udemy"
+rootProject.name = "mall"

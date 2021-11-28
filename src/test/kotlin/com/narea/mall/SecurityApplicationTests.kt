@@ -1,4 +1,4 @@
-package com.spring.security
+package com.narea.mall
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
