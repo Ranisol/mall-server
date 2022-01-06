@@ -6,27 +6,29 @@ import javax.persistence.*
 
 @Entity
 @Table
-class Inquiry {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    val id:Int = 0
+class Inquiry:BaseTimeEntity() {
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    var id:Long = 0
     @Column(nullable = false)
-    val title:String = StringUtils.EMPTY
+    var title:String = StringUtils.EMPTY
     @Column(nullable = false)
     val content:String = StringUtils.EMPTY
     @OneToMany( fetch = FetchType.LAZY, mappedBy = "inquiry")
-    var files:MutableList<InquiryFile> = mutableListOf()
+    var files:List<InquiryFile> = emptyList()
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     val item:Item = Item()
+    @ManyToOne
+    val user:User = User()
+
 
 }
 
 @Entity
 @Table
-class InquiryFile {
+class InquiryFile:BaseTimeEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    val id:Int = 0
+    val id:Long = 0
     @Column(nullable = false)
     var name:String = EMPTY_STRING;
     @ManyToOne(optional = false)

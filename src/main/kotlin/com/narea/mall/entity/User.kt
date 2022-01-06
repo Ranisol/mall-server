@@ -4,6 +4,8 @@ import org.apache.commons.lang3.StringUtils
 import java.time.LocalDateTime
 import javax.persistence.*
 
+
+
 @Entity
 @Table
 class User:BaseTimeEntity() {
@@ -19,4 +21,10 @@ class User:BaseTimeEntity() {
     var password: String = StringUtils.EMPTY
     @ManyToMany(fetch = FetchType.EAGER)
     var role: MutableList<Role> = emptyList<Role>().toMutableList()
+
+    @OneToMany(mappedBy = "user")
+    var shippingAddresses:List<ShippingAddress> = emptyList()
+
+
+
 }

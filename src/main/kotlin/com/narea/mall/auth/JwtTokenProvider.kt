@@ -23,7 +23,7 @@ class JwtTokenProvider(@Value("\${jwt.secret}") secretKey: String) {
     companion object {
 
         private const val ROLES = "roles"
-        private const val ACCESS_TOKEN_EXPIRE_TIME = 1000 * 20
+        private const val ACCESS_TOKEN_EXPIRE_TIME = 1000 * 30
         private const val REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 10
     }
 
@@ -41,10 +41,10 @@ class JwtTokenProvider(@Value("\${jwt.secret}") secretKey: String) {
             .signWith(key, signatureAlgorithm) // header "alg": "HS256"
             .compact()
     }
-    fun generateRefreshToken(authentication: Authentication):String {
+    fun generateRefreshToken():String {
         val refreshTokenExpiresIn = Date(Date().time + REFRESH_TOKEN_EXPIRE_TIME)
         return Jwts.builder()
-            .setExpiration(Date(Date().time + REFRESH_TOKEN_EXPIRE_TIME))
+            .setExpiration(refreshTokenExpiresIn)
             .signWith(key, signatureAlgorithm)
             .compact()
     }

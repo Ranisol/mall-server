@@ -1,16 +1,10 @@
 package com.narea.mall.service
-
-
-import com.narea.mall.LoginRequest
-import com.narea.mall.ReissueRequest
-import com.narea.mall.TokenResponse
-import com.narea.mall.auth.CustomUserDetails
 import com.narea.mall.auth.JwtTokenProvider
 import com.narea.mall.entity.RefreshToken
-import com.narea.mall.exception.BadRequestException
 import com.narea.mall.repository.RefreshTokenRepository
-import com.sun.security.auth.UserPrincipal
-import io.jsonwebtoken.ExpiredJwtException
+import com.narea.mall.request.LoginRequest
+import com.narea.mall.request.ReissueRequest
+import com.narea.mall.response.TokenResponse
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
@@ -22,12 +16,11 @@ import org.springframework.stereotype.Service
 @Service
 class AuthService(
     private val jwtTokenProvider: JwtTokenProvider,
-    private val passwordEncoder: PasswordEncoder,
     private val authenticationManagerBuilder: AuthenticationManagerBuilder,
     private val refreshTokenRepository: RefreshTokenRepository,
     private val userService: UserService
 ) {
-    fun login(loginRequest:LoginRequest):TokenResponse {
+    fun login(loginRequest: LoginRequest): TokenResponse {
         val user = userService.getUser(loginRequest.email)
         val authenticationToken = UsernamePasswordAuthenticationToken(
             User(user.email, user.password, user.role.map { SimpleGrantedAuthority(it.name) }),
@@ -35,7 +28,7 @@ class AuthService(
         )
         val authentication = authenticationManagerBuilder.`object`.authenticate(authenticationToken)
         val accessToken = jwtTokenProvider.generateAccessToken(authentication)
-        val refreshToken = jwtTokenProvider.generateRefreshToken(authentication)
+        val refreshToken = jwtTokenProvider.generateRefreshToken()
         refreshTokenRepository.save(
             RefreshToken().apply {
                 email = loginRequest.email
@@ -49,9 +42,9 @@ class AuthService(
     fun reissue(tokenRequest: ReissueRequest):TokenResponse {
         val authentication = jwtTokenProvider.getAuthenticationFromAccessToken(tokenRequest.accessToken)
         val prevRefreshToken = refreshTokenRepository.getRefreshTokenByEmail(authentication.name) ?: throw BadCredentialsException("존재하지 않거나 만료된 refreshToken 입니다.")
-        if(tokenRequest.refreshToken != prevRefreshToken.token) throw BadCredentialsException("적합하지 않은 refreshToken입니다.")
+        if(tokenRequest.refreshToken != prevRefreshToken.token) throw BadCredentialsException("적합하지 않은 refreshToken 입니다.")
         val newAccessToken = jwtTokenProvider.generateAccessToken(authentication)
-        val newRefreshToken = jwtTokenProvider.generateRefreshToken(authentication)
+        val newRefreshToken = jwtTokenProvider.generateRefreshToken()
         refreshTokenRepository.save(RefreshToken().apply {
             email = authentication.name
             token = newRefreshToken

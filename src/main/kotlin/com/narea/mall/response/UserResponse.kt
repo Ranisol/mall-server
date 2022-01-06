@@ -1,7 +1,13 @@
-package com.narea.mall
+package com.narea.mall.response
+
 import com.narea.mall.entity.Role
 import com.narea.mall.utils.EMPTY_STRING
 import java.time.LocalDateTime
+
+data class RoleResponse (
+    var id:Long = 0,
+    var name:String = EMPTY_STRING
+)
 
 data class UserResponse (
     var id:Long = 0,
@@ -12,12 +18,3 @@ data class UserResponse (
     var createDate: LocalDateTime? = null
 )
 
-data class RoleResponse (
-    var id:Long = 0,
-    var name:String = EMPTY_STRING
-        )
-
-data class TokenResponse (
-    var accessToken:String = EMPTY_STRING,
-    var refreshToken:String = EMPTY_STRING,
-)

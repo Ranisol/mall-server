@@ -1,9 +1,8 @@
 package com.narea.mall
 
 import com.narea.mall.entity.User
+import com.narea.mall.response.UserResponse
 import org.mapstruct.Mapper
-import org.mapstruct.Mapping
-import org.mapstruct.Mappings
 import org.mapstruct.factory.Mappers
 
 interface ResponseMapper<R, E> {

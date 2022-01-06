@@ -5,17 +5,12 @@ import javax.persistence.*
 
 @Entity
 @Table
-class Role {
+class ShippingAddress:BaseTimeEntity() {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(unique = true)
     var id:Long = 0
-    var name:String = EMPTY_STRING
-}
-
-
-@Table
-@Entity
-class RefreshToken:BaseTimeEntity() {
-    @Id
-    var email:String = EMPTY_STRING
-    var token:String = EMPTY_STRING
+    var isDefault:Boolean = false
+    var address:String = EMPTY_STRING
+    @ManyToOne()
+    var user:User = User()
 }

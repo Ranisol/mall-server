@@ -1,4 +1,3 @@
-
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
@@ -37,7 +36,7 @@ dependencies {
 
 	//implementation("org.springframework.cloud:spring-cloud-starter-aws:2.2.5.RELEASE")
 
-    // jpa
+	// jpa
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
 	implementation("org.springframework.boot:spring-boot-starter-data-rest")
@@ -51,7 +50,7 @@ dependencies {
 	implementation("org.springframework.data:spring-data-envers")
 
 	// spring security
-	implementation("org.springframework.boot:spring-boot-starter-security:2.5.6")
+	implementation("org.springframework.boot:spring-boot-starter-security")
 	// jwt
 	implementation("com.auth0:java-jwt:3.18.2")
 	implementation("io.jsonwebtoken:jjwt-impl:0.11.2")

@@ -1,20 +1,17 @@
 package com.narea.mall.service
-
 import com.narea.mall.*
-import com.narea.mall.auth.JwtTokenProvider
 import com.narea.mall.entity.Role
 import com.narea.mall.entity.User
 import com.narea.mall.exception.NotFoundException
 import com.narea.mall.repository.RoleRepository
 import com.narea.mall.repository.UserRepository
+import com.narea.mall.response.UserResponse
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.PasswordEncoder
-
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 
 @Service
 class UserService(
@@ -40,7 +37,7 @@ class UserService(
     fun getUsers(): List<User> = userRepository.findAll()
     fun createUser(userCreateRequest: UserCreateRequest): UserResponse {
         return userCreateRequest.toEntity()
-            .apply { password = passwordEncoder.encode(password) }
+            .apply { password = passwordEncoder.encode(userCreateRequest.password) }
             .let { user -> userRepository.save(user)
             }.toResponse()
     }
@@ -74,4 +71,5 @@ class UserService(
             name = roleName
         }.let { role -> roleRepository.save(role) }
     }
+
 }

@@ -1,25 +1,26 @@
 package com.narea.mall.entity
 
 import com.narea.mall.utils.EMPTY_STRING
-import org.apache.commons.lang3.StringUtils
 import javax.persistence.*
 
 @Entity
 @Table
-class Review:BaseTimeEntity() {
+class Reviews {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id:Long = 0
+    var id:Int = 0
     @Column(nullable = false)
-    var title:String = StringUtils.EMPTY
+    var title:String = EMPTY_STRING
     @Column(nullable = false)
-    var content:String = StringUtils.EMPTY
+    var content:String = EMPTY_STRING
     @Column(nullable = false)
-    var like:Long = 0
-    @ManyToOne(optional = false)
-    var item:Item = Item()
+    var hearts:Long = 0
     @OneToMany( fetch = FetchType.LAZY, mappedBy = "review")
-    var files:MutableList<ReviewFile> = mutableListOf()
+    var files:List<ReviewFile> = emptyList()
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    var item:Item = Item()
+    @ManyToOne
+    var user:User = User()
 }
 
 @Entity
@@ -31,6 +32,6 @@ class ReviewFile:BaseTimeEntity() {
     @Column(nullable = false)
     var name:String = EMPTY_STRING;
     @ManyToOne(optional = false)
-    var review:Review = Review()
+    var review:Reviews = Reviews()
 }
 

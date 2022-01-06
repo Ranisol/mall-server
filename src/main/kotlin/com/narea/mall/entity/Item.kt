@@ -14,7 +14,8 @@ class Item:BaseTimeEntity() {
     @Column(nullable = false)
     var description:String = StringUtils.EMPTY
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "item")
-    var files:MutableList<ItemFile> = mutableListOf()
+    var files:List<ItemFile> = emptyList()
+
 }
 
 @Entity

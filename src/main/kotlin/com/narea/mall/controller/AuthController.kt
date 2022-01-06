@@ -1,9 +1,7 @@
 package com.narea.mall.backend.api.controller
-
-
-import com.narea.mall.LoginRequest
-import com.narea.mall.ReissueRequest
 import com.narea.mall.UserCreateRequest
+import com.narea.mall.request.LoginRequest
+import com.narea.mall.request.ReissueRequest
 import com.narea.mall.service.AuthService
 import com.narea.mall.service.UserService
 import io.swagger.v3.oas.annotations.tags.Tag

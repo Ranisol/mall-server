@@ -17,7 +17,7 @@ class JwtAuthenticationEntryPoint : AuthenticationEntryPoint {
         authException: AuthenticationException?
     ) {
         // 유효한 자격증명을 제공하지 않고 접근하려 할때 401
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED)
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "자격 증명에 실패함")
     }
 }
 
@@ -28,7 +28,7 @@ class JwtAccessDeniedHandler : AccessDeniedHandler {
         response: HttpServletResponse,
         accessDeniedException: org.springframework.security.access.AccessDeniedException?
     ) {
-        response.sendError(HttpServletResponse.SC_FORBIDDEN)
+        response.sendError(HttpServletResponse.SC_FORBIDDEN, "들어오지마")
     }
 }
 
