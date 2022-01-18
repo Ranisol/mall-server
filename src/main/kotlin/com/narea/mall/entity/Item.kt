@@ -11,11 +11,13 @@ class Item:BaseTimeEntity() {
     var id:Long = 0
     @Column(nullable = false)
     var name:String = StringUtils.EMPTY
+    var timeToDelivery: Int? = null
     @Column(nullable = false)
     var description:String = StringUtils.EMPTY
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "item")
+    var price:Long = 0
+    var inventory:Long = 0
+    @OneToMany(mappedBy = "item", orphanRemoval = true, cascade = [CascadeType.ALL])
     var files:List<ItemFile> = emptyList()
-
 }
 
 @Entity
@@ -25,6 +27,7 @@ class ItemFile:BaseTimeEntity() {
     var id:Long = 0
     @Column(nullable = false)
     var name:String = EMPTY_STRING
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     var item:Item = Item()
 }
+

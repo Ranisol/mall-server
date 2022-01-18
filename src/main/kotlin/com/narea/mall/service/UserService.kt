@@ -41,6 +41,12 @@ class UserService(
             .let { user -> userRepository.save(user)
             }.toResponse()
     }
+    fun createUsers(userCreateRequests: List<UserCreateRequest>): List<UserResponse>{
+        return userRepository.saveAll(
+            userCreateRequests.map { request -> request.toEntity() }
+        ).map { user -> user.toResponse() }
+
+    }
 
     fun updateUser(userId: Long, userUpdateRequest: UserUpdateRequest): UserResponse {
         val user = userRepository.findByIdOrNull(userId) ?: throw NotFoundException("user not exist")
@@ -60,7 +66,7 @@ class UserService(
     }
 
     fun getRole(roleId: Long) = roleRepository.findByIdOrNull(roleId) ?: throw NotFoundException("role not found")
-    fun getRoles() = roleRepository.findAll()
+    fun getRoles(): List<Role> = roleRepository.findAll()
     fun createRole(roleName: String): Role = Role()
         .apply { name = roleName }
         .let { role -> roleRepository.save(role) }

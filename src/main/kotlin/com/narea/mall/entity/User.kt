@@ -1,5 +1,5 @@
 package com.narea.mall.entity
-import com.fasterxml.jackson.annotation.JsonIgnore
+import com.narea.mall.utils.EMPTY_STRING
 import org.apache.commons.lang3.StringUtils
 import java.time.LocalDateTime
 import javax.persistence.*
@@ -22,9 +22,22 @@ class User:BaseTimeEntity() {
     @ManyToMany(fetch = FetchType.EAGER)
     var role: MutableList<Role> = emptyList<Role>().toMutableList()
 
-    @OneToMany(mappedBy = "user")
-    var shippingAddresses:List<ShippingAddress> = emptyList()
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var userAddresses:List<UserAddress> = emptyList()
 
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var basket:Basket? = null
+}
 
-
+@Entity
+@Table
+class UserAddress:BaseTimeEntity() {
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(unique = true)
+    var id:Long = 0
+    var isDefault:Boolean = false
+    var address:String = EMPTY_STRING
+    var expectedArrivalDate: LocalDateTime? = null
+    @ManyToOne(fetch = FetchType.LAZY)
+    var user:User = User()
 }
