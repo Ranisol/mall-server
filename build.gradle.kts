@@ -1,7 +1,7 @@
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
-	id("org.springframework.boot") version "2.5.6"
+	id("org.springframework.boot") version "2.6.2"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
 	kotlin("jvm") version "1.5.31"
 	kotlin("kapt") version "1.5.0"
@@ -10,16 +10,24 @@ plugins {
 }
 
 repositories {
-	jcenter()
 	mavenCentral()
 }
+group = "com.narea.mall"
+version = "0.0.1-SNAPSHOT"
+java.sourceCompatibility = JavaVersion.VERSION_11
+val querydslVersion = "5.0.0"
 
-apply(plugin = "kotlin")
-apply(plugin = "kotlin-kapt")
-apply(plugin = "org.springframework.boot")
-apply(plugin = "io.spring.dependency-management")
-apply(plugin = "org.jetbrains.kotlin.plugin.spring")
-apply(plugin = "org.jetbrains.kotlin.plugin.jpa")
+configurations {
+	compileOnly {
+		extendsFrom(configurations.annotationProcessor.get())
+	}
+}
+
+kotlin.sourceSets {
+	main {
+		setBuildDir("$buildDir")
+	}
+}
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
@@ -34,16 +42,17 @@ dependencies {
 	implementation("org.mapstruct:mapstruct:1.4.0.Final")
 	kapt("org.mapstruct:mapstruct-processor:1.4.0.Final")
 
-	//implementation("org.springframework.cloud:spring-cloud-starter-aws:2.2.5.RELEASE")
+	// querydsl
+	implementation("com.querydsl:querydsl-jpa:$querydslVersion")
+	kapt("com.querydsl:querydsl-apt:$querydslVersion:jpa")
+	kapt("org.springframework.boot:spring-boot-configuration-processor")
 
 	// jpa
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-
 	implementation("org.springframework.boot:spring-boot-starter-data-rest")
 
 	// swagger
 	implementation("org.springdoc:springdoc-openapi-ui:1.5.3")
-
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
 	// JPA 엔티티 히스토리
@@ -67,7 +76,7 @@ dependencies {
 	testImplementation("com.h2database:h2")
 	testImplementation("org.junit.jupiter:junit-jupiter-engine")
 	testImplementation("org.jetbrains.kotlin:kotlin-test")
-	testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+	//testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 
 }
 
@@ -75,22 +84,24 @@ tasks {
 	compileKotlin {
 		kotlinOptions {
 			freeCompilerArgs = listOf("-Xjsr305=strict")
-			jvmTarget = "15"
+			jvmTarget = "11"
 		}
-		dependsOn(processResources) // kotlin 에서 ConfigurationProperties
 	}
-
-
 	compileTestKotlin {
 		kotlinOptions {
 			freeCompilerArgs = listOf("-Xjsr305=strict")
-			jvmTarget = "15"
+			jvmTarget = "11"
 		}
 	}
+	test {
+		useJUnitPlatform()
+	}
 }
+
+
 
 val jar: Jar by tasks
 val bootJar: BootJar by tasks
 
 bootJar.enabled = false
-jar.enabled = false
+jar.enabled = true

@@ -9,18 +9,18 @@ import javax.persistence.*
 class Inquiry:BaseTimeEntity() {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     var id:Long = 0
-    @Column(nullable = false)
     var title:String = StringUtils.EMPTY
-    @Column(nullable = false)
-    val content:String = StringUtils.EMPTY
-    @OneToMany( fetch = FetchType.LAZY, mappedBy = "inquiry")
+    var content:String = StringUtils.EMPTY
+    var hidden:Boolean = false
+    var onlyAdminCanSee:Boolean = false
+    @OneToMany(mappedBy = "inquiry", orphanRemoval = true, cascade = [CascadeType.ALL]) // OneToMany에는 default로 FetchType이 Lazy로 되어있음, 고아객체제거와 cascade all로 파일과 라이플사이클 동일하게 맞춰줌
     var files:List<InquiryFile> = emptyList()
+    @ManyToOne(optional = false, fetch = FetchType.LAZY) // optional: nullable false와 같은 역할
+    @JoinColumn(nullable = false)
+    var item:Item = Item()
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    val item:Item = Item()
-    @ManyToOne
-    val user:User = User()
-
-
+    @JoinColumn(nullable = false)
+    var user:User = User()
 }
 
 @Entity

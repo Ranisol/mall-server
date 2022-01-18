@@ -9,17 +9,17 @@ class Reviews {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id:Int = 0
-    @Column(nullable = false)
     var title:String = EMPTY_STRING
-    @Column(nullable = false)
     var content:String = EMPTY_STRING
-    @Column(nullable = false)
     var hearts:Long = 0
-    @OneToMany( fetch = FetchType.LAZY, mappedBy = "review")
+    var hidden:Boolean = false
+    @OneToMany( fetch = FetchType.LAZY, mappedBy = "review", orphanRemoval = true, cascade = [CascadeType.ALL])
     var files:List<ReviewFile> = emptyList()
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(nullable = false)
     var item:Item = Item()
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(nullable = false)
     var user:User = User()
 }
 
