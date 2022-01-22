@@ -16,8 +16,8 @@ data class UserCreateRequest(
 )
 
 data class UserUpdateRequest(
-    val name:String? = null,
-    val mobileNumber: String? = null,
-    val password:String? = null,
+    var name:String? = null,
+    var mobileNumber: String? = null,
+    var password:String? = null,
 )
 

@@ -7,7 +7,7 @@ import javax.persistence.*
 
 
 @Entity
-@Table
+@Table(name = "users")
 class User:BaseTimeEntity() {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long = 0
@@ -22,7 +22,7 @@ class User:BaseTimeEntity() {
     @ManyToMany(fetch = FetchType.EAGER)
     var role: MutableList<Role> = emptyList<Role>().toMutableList()
 
-    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true) // 라이프사이클 동일하게
     var userAddresses:List<UserAddress> = emptyList()
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)

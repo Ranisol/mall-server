@@ -5,8 +5,8 @@ import javax.persistence.*
 
 @Entity
 @Table
-class Category:BaseTimeEntity() {
+class Category(
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    var id:Long = 0
+    var id:Long = 0,
     var name:String = EMPTY_STRING
-}
+):BaseTimeEntity()
