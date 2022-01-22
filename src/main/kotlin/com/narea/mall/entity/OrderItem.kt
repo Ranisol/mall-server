@@ -18,12 +18,11 @@ class OrdersItem {
 
     fun getTotalPrice() = count * item.price
     fun order () {
-        item.inventory = item.inventory - count // 팬텀 읽기 문제?
+        item.inventory -= count
         if(item.inventory < 0) throw BadRequestException("${item.name}: item inventory not enough")
-        // exception이 발생했을 때, 이미 차감된 애들에 대해서는 롤백해야하는지?
     }
     fun cancel () {
-        item.inventory = item.inventory + count
+        item.inventory += count
     }
 }
 

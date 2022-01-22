@@ -36,7 +36,6 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-	runtimeOnly("mysql:mysql-connector-java")
 
 	// map-struct
 	implementation("org.mapstruct:mapstruct:1.4.0.Final")
@@ -50,6 +49,13 @@ dependencies {
 	// jpa
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-data-rest")
+
+	// database
+	implementation("org.postgresql:postgresql")
+	runtimeOnly("mysql:mysql-connector-java")
+
+	// aws
+	implementation("org.springframework.cloud:spring-cloud-starter-aws:2.2.5.RELEASE")
 
 	// swagger
 	implementation("org.springdoc:springdoc-openapi-ui:1.5.3")
