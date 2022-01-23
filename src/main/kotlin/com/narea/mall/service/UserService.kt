@@ -9,8 +9,10 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
+@Transactional(readOnly = true)
 class UserService(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder
@@ -29,6 +31,7 @@ class UserService(
         userRepository.findByIdOrNull(userId) ?: throw NotFoundException("user not found $userId")
 
     fun getUsers(): List<User> = userRepository.findAll()
+    @Transactional
     fun createUser(userCreateRequest: UserCreateRequest): UserResponse {
         return userCreateRequest.toEntity()
             .apply {
@@ -37,6 +40,7 @@ class UserService(
             .let { user -> userRepository.save(user)
             }.toResponse()
     }
+    @Transactional
     fun createUsers(userCreateRequests: List<UserCreateRequest>): List<UserResponse>{
         return userRepository.saveAll(
             userCreateRequests.map { request -> request.toEntity() }
@@ -44,6 +48,7 @@ class UserService(
 
     }
 
+    @Transactional
     fun updateUser(userId: Long, userUpdateRequest: UserUpdateRequest): UserResponse {
         val user = userRepository.findByIdOrNull(userId) ?: throw NotFoundException("user not exist")
         return user.apply {

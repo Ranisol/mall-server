@@ -26,9 +26,11 @@ class ItemReviewService(
     // 아이템에 대한 리뷰 응답 (reply 와 file은 아이템에 딸려 나옴)
     fun getItemReviewResponse(reviewId: Long)
             = getReview(reviewId).toResponse()
+    /** TODO: 동적쿼리 추가 */
     fun getItemReviewsResponse(itemId: Long, pageable: Pageable)
             = reviewRepository.findAllByItemId(itemId, pageable).map { it.toResponse() }
-    fun getUserItemReviewResponse(userId: Long, pageable: Pageable)
+    /** TODO: 동적쿼리 추가 */
+    fun getUserItemReviewsResponse(userId: Long, pageable: Pageable)
         = reviewRepository.findAllByUserId(userId, pageable).map { it.toUserResponse() }
 
     // 리뷰 수정
@@ -45,6 +47,7 @@ class ItemReviewService(
             content = updateRequest.content ?: content
             hearts = updateRequest.hearts ?: hearts
         }.also { reviewRepository.save(it) }.toResponse()
+    @Transactional
     fun deleteReview(reviewId: Long)
         = reviewRepository.delete(
             getReview(reviewId).apply {
