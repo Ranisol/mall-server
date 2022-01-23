@@ -66,7 +66,7 @@ class UserItemReviewController(
         @PageableDefault
         @Parameter(hidden = true)
         pageable: Pageable
-    ) = itemReviewService.getUserItemReviewResponse(userId, pageable)
+    ) = itemReviewService.getUserItemReviewsResponse(userId, pageable)
 
     @Operation(summary = "아이템 리뷰 수정")
     @PutMapping("/{reviewId}")

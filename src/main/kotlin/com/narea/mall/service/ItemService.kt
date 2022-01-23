@@ -33,6 +33,7 @@ class ItemService(
                 }
             }
         }
+    /** TODO: 동적쿼리 추가 */
     fun getItemsResponse(pageable: Pageable) =
         itemRepository.findAll(pageable).map { entity ->
             entity.toResponse().apply {
