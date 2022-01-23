@@ -1,9 +1,9 @@
 package com.narea.mall.service
 
-import com.narea.mall.UserCreateRequest
+
+import com.narea.mall.dto.UserCreateRequest
 import com.narea.mall.entity.User
 import com.narea.mall.repository.UserRepository
-import com.narea.mall.toResponse
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

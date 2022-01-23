@@ -2,6 +2,8 @@ package com.narea.mall.exception
 
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.MalformedJwtException
+import io.jsonwebtoken.UnsupportedJwtException
+import io.jsonwebtoken.security.SecurityException
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.converter.HttpMessageNotReadableException
@@ -86,6 +88,27 @@ class ExceptionController {
         MallErrorResponse.create(e)
 
 
+    // 인증 예외
+//    @ResponseStatus(HttpStatus.FORBIDDEN)
+//    @ExceptionHandler(SecurityException::class)
+//    fun handleJwtSecurityException(e: SecurityException) =
+//        MallErrorResponse.create(e.javaClass.name, "잘못된 JWT 서명입니다.")
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(MalformedJwtException::class)
+    fun handleMalformedJwtException(e: MalformedJwtException) =
+        MallErrorResponse.create(e.javaClass.name, "잘못된 JWT 서명입니다.")
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(ExpiredJwtException::class)
+    fun handleMalformedJwtException(e: ExceptionHandler) =
+        MallErrorResponse.create(e.javaClass.name, "만료된 JWT 서명입니다.")
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(UnsupportedJwtException::class)
+    fun handleMalformedJwtException(e: UnsupportedJwtException) =
+        MallErrorResponse.create(e.javaClass.name, "지원되지 않는 서명입니다.")
+
 
     data class MallErrorResponse(
         val exception: String,
@@ -96,6 +119,12 @@ class ExceptionController {
                 return MallErrorResponse(
                     exception = throwable.javaClass.name,
                     message = throwable.message
+                )
+            }
+            fun create(exception:String, message: String):MallErrorResponse {
+                return MallErrorResponse(
+                    exception = exception,
+                    message = message
                 )
             }
         }

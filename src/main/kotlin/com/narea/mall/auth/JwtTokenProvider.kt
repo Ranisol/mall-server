@@ -23,8 +23,8 @@ class JwtTokenProvider(@Value("\${jwt.secret}") secretKey: String) {
     companion object {
 
         private const val ROLES = "roles"
-        private const val ACCESS_TOKEN_EXPIRE_TIME = 1000 * 30
-        private const val REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 10
+        private const val ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 100
+        private const val REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 100
     }
 
     private val key: Key = Keys.hmacShaKeyFor(
@@ -61,21 +61,8 @@ class JwtTokenProvider(@Value("\${jwt.secret}") secretKey: String) {
     }
 
     fun validateToken(token: String): Boolean {
-        try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token)
-            return true
-        } catch (e: SecurityException) {
-           println("잘못된 JWT 서명입니다.")
-        } catch (e: MalformedJwtException) {
-           println("잘못된 JWT 서명입니다.")
-        } catch (e: ExpiredJwtException) {
-           println("만료된 JWT 토큰입니다.")
-        } catch (e: UnsupportedJwtException) {
-           println("지원되지 않는 JWT 토큰입니다.")
-        } catch (e: IllegalArgumentException) {
-           println("JWT 토큰이 잘못되었습니다.")
-        }
-        return false
+        Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token) // 적합하지 않으면 여기서 아래의 예외 발생
+        return true
     }
 
     private fun parseClaims(accessToken: String): Claims {
