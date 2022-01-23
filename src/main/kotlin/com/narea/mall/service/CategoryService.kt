@@ -6,10 +6,11 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
-class CategoryService(private val categoryRepository: CategoryRepository
+class CategoryService(
+    private val categoryRepository: CategoryRepository
 ) {
     fun getCategories():List<Category> = categoryRepository.findAll()
-    fun getCategory(categoryId: Long) = categoryRepository.findByIdOrNull(categoryId) ?: throw BadRequestException("$categoryId does not exist")
+    fun getCategory(categoryId: Long) = categoryRepository.findByIdOrNull(categoryId) ?: throw BadRequestException("categoryId:$categoryId does not exist")
     fun createCategory(name:String) = categoryRepository.save(Category(name = name))
     fun updateCategory(categoryId:Long, categoryName: String)
         = getCategory(categoryId).apply { name = categoryName }.also { categoryRepository.save(it) }
@@ -17,3 +18,4 @@ class CategoryService(private val categoryRepository: CategoryRepository
         getCategory(categoryId)
     )
 }
+

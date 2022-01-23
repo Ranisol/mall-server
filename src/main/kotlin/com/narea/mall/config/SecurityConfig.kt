@@ -44,7 +44,7 @@ class SecurityConfig(
             .authenticationEntryPoint(jwtAuthenticationEntryPoint)
             .accessDeniedHandler(jwtAccessDeniedHandler)
             .and().authorizeRequests()
-            .antMatchers("/api/v1/users/**").authenticated() // access private resource (specific user)
+            //.antMatchers("/api/v1/users/**").authenticated() // access private resource (specific user)
             .antMatchers("/**").permitAll() // access public resource
             .and().addFilterBefore(JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter::class.java)
             .httpBasic().disable()

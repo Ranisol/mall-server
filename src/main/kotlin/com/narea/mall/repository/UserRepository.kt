@@ -10,7 +10,3 @@ interface UserRepository:JpaRepository<User, Long> {
     fun findByEmail(email: String): User?
 }
 
-@Repository
-interface RoleRepository: JpaRepository<Role, Long> {
-    fun findByName(name:String): Role?
-}

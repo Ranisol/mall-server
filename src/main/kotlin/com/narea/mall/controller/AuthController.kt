@@ -1,14 +1,12 @@
-package com.narea.mall.backend.api.controller
-import com.narea.mall.UserCreateRequest
-import com.narea.mall.request.LoginRequest
-import com.narea.mall.request.ReissueRequest
+package com.narea.mall.controller
+import com.narea.mall.dto.LoginRequest
+import com.narea.mall.dto.ReissueRequest
+import com.narea.mall.dto.UserCreateRequest
 import com.narea.mall.service.AuthService
 import com.narea.mall.service.UserService
 import io.swagger.v3.oas.annotations.tags.Tag
-import io.swagger.v3.oas.annotations.tags.Tags
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
-import javax.validation.constraints.Email
 
 @Tag(name = "auth", description = "인증 api")
 @RestController

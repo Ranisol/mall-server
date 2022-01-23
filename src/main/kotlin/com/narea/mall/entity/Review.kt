@@ -11,9 +11,10 @@ class Reviews {
     var id:Int = 0
     var title:String = EMPTY_STRING
     var content:String = EMPTY_STRING
-    var hearts:Long = 0
+    var hearts:Int = 0
     var hidden:Boolean = false
     @OneToMany( fetch = FetchType.LAZY, mappedBy = "review", orphanRemoval = true, cascade = [CascadeType.ALL])
+    @Column(length = 512)
     var files:List<ReviewFile> = emptyList()
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(nullable = false)
@@ -25,13 +26,14 @@ class Reviews {
 
 @Entity
 @Table
-class ReviewFile:BaseTimeEntity() {
+class ReviewFile(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id:Long = 0
+    var id:Long = 0,
     @Column(nullable = false)
-    var name:String = EMPTY_STRING;
-    @ManyToOne(optional = false)
+    var name:String = EMPTY_STRING,
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(nullable = false)
     var review:Reviews = Reviews()
-}
+):BaseTimeEntity()
 

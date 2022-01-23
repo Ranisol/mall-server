@@ -5,6 +5,10 @@ import java.time.LocalDateTime
 import javax.persistence.*
 
 
+enum class Role (role:String) {
+    USER("ROLE_USER"),
+
+}
 
 @Entity
 @Table(name = "users")
@@ -12,15 +16,14 @@ class User:BaseTimeEntity() {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long = 0
     @Column(nullable = false)
-    var name:String = StringUtils.EMPTY
+    var name:String = EMPTY_STRING
     @Column(nullable = false, unique = true)
-    var email:String = StringUtils.EMPTY
+    var email:String = EMPTY_STRING
     @Column(nullable = false)
-    var mobileNumber:String = StringUtils.EMPTY
+    var mobileNumber:String = EMPTY_STRING
     @Column(nullable = false)
-    var password: String = StringUtils.EMPTY
-    @ManyToMany(fetch = FetchType.EAGER)
-    var role: MutableList<Role> = emptyList<Role>().toMutableList()
+    var password: String = EMPTY_STRING
+    var role: String = "ROLE_USER"
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true) // 라이프사이클 동일하게
     var userAddresses:List<UserAddress> = emptyList()

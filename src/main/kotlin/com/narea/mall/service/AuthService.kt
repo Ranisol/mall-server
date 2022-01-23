@@ -1,10 +1,10 @@
 package com.narea.mall.service
 import com.narea.mall.auth.JwtTokenProvider
+import com.narea.mall.dto.LoginRequest
+import com.narea.mall.dto.ReissueRequest
+import com.narea.mall.dto.TokenResponse
 import com.narea.mall.entity.RefreshToken
 import com.narea.mall.repository.RefreshTokenRepository
-import com.narea.mall.request.LoginRequest
-import com.narea.mall.request.ReissueRequest
-import com.narea.mall.response.TokenResponse
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
@@ -23,7 +23,7 @@ class AuthService(
     fun login(loginRequest: LoginRequest): TokenResponse {
         val user = userService.getUser(loginRequest.email)
         val authenticationToken = UsernamePasswordAuthenticationToken(
-            User(user.email, user.password, user.role.map { SimpleGrantedAuthority(it.name) }),
+            User(user.email, user.password, arrayListOf(SimpleGrantedAuthority(user.role as String))),
             loginRequest.password
         )
         val authentication = authenticationManagerBuilder.`object`.authenticate(authenticationToken)

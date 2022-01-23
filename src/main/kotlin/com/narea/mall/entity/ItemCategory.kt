@@ -4,14 +4,13 @@ import javax.persistence.*
 
 @Entity
 @Table
-class ItemCategory {
+class ItemCategory(
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    var id:Long = 0
+    var id:Long = 0,
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(nullable = false)
-    var item: Item = Item()
-
+    var item: Item = Item(),
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(nullable = false)
     var category:Category = Category()
-}
+)
