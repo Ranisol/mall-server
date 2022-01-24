@@ -40,7 +40,7 @@ class InquiryFile (
 @Table
 class InquiryReply (
     @Id @GeneratedValue
-    var id: Int = 0,
+    var id: Long = 0,
     var content:String = EMPTY_STRING,
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(nullable = false)

@@ -14,9 +14,10 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
+
 @Service
 @Transactional(readOnly = true)
-class AuthService(
+class AuthService (
     private val jwtTokenProvider: JwtTokenProvider,
     private val authenticationManagerBuilder: AuthenticationManagerBuilder,
     private val refreshTokenRepository: RefreshTokenRepository,
@@ -26,7 +27,7 @@ class AuthService(
     fun login(loginRequest: LoginRequest): TokenResponse {
         val user = userService.getUser(loginRequest.email)
         val authenticationToken = UsernamePasswordAuthenticationToken(
-            User(user.email, user.password, arrayListOf(SimpleGrantedAuthority(user.role as String))),
+            User(user.email, user.password, arrayListOf(SimpleGrantedAuthority(user.role))),
             loginRequest.password
         )
         val authentication = authenticationManagerBuilder.`object`.authenticate(authenticationToken)

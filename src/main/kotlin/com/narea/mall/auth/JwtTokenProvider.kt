@@ -51,7 +51,6 @@ class JwtTokenProvider(@Value("\${jwt.secret}") secretKey: String) {
     fun getAuthenticationFromAccessToken(accessToken: String): Authentication {
         // 토큰 복호화
         val claims = parseClaims(accessToken)
-        println(claims)
         val authorities: Collection<GrantedAuthority?> =
             Arrays.stream(claims[ROLES].toString().split(",").toTypedArray())
                 .map { role: String? -> SimpleGrantedAuthority(role) }

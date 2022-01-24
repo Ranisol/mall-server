@@ -31,7 +31,6 @@ class Orders {
     @OneToMany(mappedBy = "orders", orphanRemoval = true, cascade = [CascadeType.ALL])
     var orderItems:List<OrdersItem> = emptyList()
 
-
     // 주문 가격
     fun getTotalPrice() = orderItems.sumOf { it.getTotalPrice() }
 

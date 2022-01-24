@@ -40,7 +40,7 @@ class ItemInquiryService(
             user = userService.getUser(userId)
             item = itemService.getItem(itemId)
         }
-    )
+    ).toResponse()
     @Transactional
     fun updateInquiry(inquiryId: Long, inquiryUpdateRequest: InquiryUpdateRequest)
         = inquiryRepository.save(
@@ -48,7 +48,7 @@ class ItemInquiryService(
                 title = inquiryUpdateRequest.title ?: title
                 content = inquiryUpdateRequest.content ?: content
             }
-        )
+        ).toResponse()
 
     @Transactional
     fun deleteInquiry(inquiryId: Long)
@@ -68,7 +68,8 @@ class ItemInquiryService(
         = file.let {
             s3Service.validateMultipartFile("inquiry", inquiryId, file)
             InquiryFile(
-                inquiry = getInquiry(inquiryId)
+                inquiry = getInquiry(inquiryId),
+                name = s3Service.create(it, getInquiryFileDir(inquiryId))
             )
         }.also {
             inquiryFileRepository.save(it)
@@ -109,8 +110,8 @@ class ItemInquiryService(
             content = content,
             inquiry = getInquiry(inquiryId),
             user = userService.getUser(userId)
-        ).apply {
-            inquiryReplyRepository.save(this)
+        ).also {
+            inquiryReplyRepository.save(it)
         }.toResponse()
     @Transactional
     fun updateInquiryReply(userId: Long, inquiryId: Long, replyId: Long, content: String)

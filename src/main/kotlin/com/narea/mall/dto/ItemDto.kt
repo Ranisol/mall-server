@@ -52,7 +52,11 @@ interface ItemMapper: RequestMapper<ItemCreateRequest, Item>, ResponseMapper<Ite
         val INSTANCE: ItemMapper = Mappers.getMapper(ItemMapper::class.java)
     }
 }
-fun Item.toResponse() = ItemMapper.INSTANCE.fromEntity(this)
+fun Item.toResponse() =
+    ItemMapper.INSTANCE.fromEntity(this).also { res ->
+        res.categoryList = this.itemCategories.map { itemCategory -> itemCategory.category }
+    }
+
 fun ItemCreateRequest.toEntity() = ItemMapper.INSTANCE.toEntity(this)
 
 @Mapper

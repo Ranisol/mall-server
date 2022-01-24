@@ -8,7 +8,7 @@ import javax.persistence.*
 class Reviews {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id:Int = 0
+    var id:Long = 0
     var title:String = EMPTY_STRING
     var content:String = EMPTY_STRING
     var hearts:Int = 0

@@ -78,7 +78,7 @@ class ItemReviewService(
         return ReviewFile(
             name =  s3Service.create(file, getReviewFileDir(reviewId)),
             review = getReview(reviewId)
-        ).toResponse()
+        ).also { reviewFileRepository.save(it) }.toResponse()
     }
 
     @Transactional
@@ -87,7 +87,7 @@ class ItemReviewService(
         return getReviewFile(fileId).apply {
                 s3Service.delete(this.name)
                 this.name = s3Service.create(file, getReviewFileDir(reviewId))
-            }.toResponse()
+            }.also { reviewFileRepository.save(it) }.toResponse()
     }
 
     @Transactional

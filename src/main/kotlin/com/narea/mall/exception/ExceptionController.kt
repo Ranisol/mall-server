@@ -87,13 +87,6 @@ class ExceptionController {
     fun handleAccessBadCredentialsException(e: BadCredentialsException): MallErrorResponse =
         MallErrorResponse.create(e)
 
-
-    // 인증 예외
-//    @ResponseStatus(HttpStatus.FORBIDDEN)
-//    @ExceptionHandler(SecurityException::class)
-//    fun handleJwtSecurityException(e: SecurityException) =
-//        MallErrorResponse.create(e.javaClass.name, "잘못된 JWT 서명입니다.")
-
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(MalformedJwtException::class)
     fun handleMalformedJwtException(e: MalformedJwtException) =
@@ -109,6 +102,15 @@ class ExceptionController {
     fun handleMalformedJwtException(e: UnsupportedJwtException) =
         MallErrorResponse.create(e.javaClass.name, "지원되지 않는 서명입니다.")
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ItemInventoryLackException::class)
+    fun handleMalformedJwtException(e: ItemInventoryLackException) =
+        MallErrorResponse.create(e.javaClass.name, "지원되지 않는 서명입니다.")
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(UserEmailExistException::class)
+    fun handleUserEmailExistException(e: UserEmailExistException) =
+        MallErrorResponse.create(e)
 
     data class MallErrorResponse(
         val exception: String,

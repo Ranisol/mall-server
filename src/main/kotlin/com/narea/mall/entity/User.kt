@@ -29,7 +29,7 @@ class User:BaseTimeEntity() {
     var userAddresses:List<UserAddress> = emptyList()
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
-    var basket:Basket? = null
+    var basket:Basket? = null // 엔티티간 상호 참조 문제, 유저 생성시마다 넣어주는걸로 변경
 }
 
 @Entity

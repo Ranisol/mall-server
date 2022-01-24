@@ -1,7 +1,9 @@
 package com.narea.mall.service
 import com.narea.mall.dto.*
+import com.narea.mall.entity.Basket
 import com.narea.mall.entity.User
 import com.narea.mall.exception.NotFoundException
+import com.narea.mall.exception.UserEmailExistException
 import com.narea.mall.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -22,7 +24,7 @@ class UserService(
         return org.springframework.security.core.userdetails.User(
             user.email,
             user.password,
-            arrayListOf(SimpleGrantedAuthority(user.role as String))
+            arrayListOf(SimpleGrantedAuthority(user.role))
         )
     }
 
@@ -33,9 +35,14 @@ class UserService(
     fun getUsers(): List<User> = userRepository.findAll()
     @Transactional
     fun createUser(userCreateRequest: UserCreateRequest): UserResponse {
+        val user = userRepository.findByEmail(userCreateRequest.email)
+        if(user != null) throw UserEmailExistException("user email:${userCreateRequest.email} already exist")
         return userCreateRequest.toEntity()
             .apply {
                 password = passwordEncoder.encode(userCreateRequest.password)
+                basket = Basket(
+                    user = this
+                )
             }
             .let { user -> userRepository.save(user)
             }.toResponse()
