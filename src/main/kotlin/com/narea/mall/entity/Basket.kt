@@ -13,7 +13,7 @@ class Basket (
     @OneToMany(mappedBy = "basket", cascade = [CascadeType.ALL], orphanRemoval = true)
     var basketItems: MutableList<BasketItem> = arrayListOf()
 ):BaseTimeEntity() {
-    fun getAllBasketItemPrice(): Long =
+    fun getAllBasketItemPrice(): Int =
         basketItems.sumOf { basketItem -> basketItem.getBasketItemPrice() }
 }
 

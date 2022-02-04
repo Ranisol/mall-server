@@ -1,6 +1,5 @@
 package com.narea.mall.repository
 
-import com.narea.mall.entity.Role
 import com.narea.mall.entity.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository

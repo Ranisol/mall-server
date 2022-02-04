@@ -13,9 +13,7 @@ abstract class BaseTimeEntity {
 
     @CreatedDate
     var createdDate: LocalDateTime? = null
-        internal set
 
     @LastModifiedDate
     var modifiedDate: LocalDateTime? = null
-        private set
 }

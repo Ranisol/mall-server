@@ -105,7 +105,7 @@ class ExceptionController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ItemInventoryLackException::class)
     fun handleMalformedJwtException(e: ItemInventoryLackException) =
-        MallErrorResponse.create(e.javaClass.name, "지원되지 않는 서명입니다.")
+        MallErrorResponse.create(e)
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UserEmailExistException::class)

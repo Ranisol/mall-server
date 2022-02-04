@@ -1,15 +1,12 @@
 package com.narea.mall.service
 
-import com.amazonaws.services.s3.model.InstructionFileId
 import com.narea.mall.dto.*
 import com.narea.mall.entity.InquiryFile
 import com.narea.mall.entity.InquiryReply
-import com.narea.mall.exception.BadRequestException
 import com.narea.mall.exception.NotFoundException
 import com.narea.mall.repository.InquiryFileRepository
 import com.narea.mall.repository.InquiryReplyRepository
 import com.narea.mall.repository.InquiryRepository
-import org.springframework.data.crossstore.ChangeSetPersister
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -27,12 +24,15 @@ class ItemInquiryService(
     private val s3Service: S3Service
 ) {
     fun getInquiry(inquiryId: Long) = inquiryRepository.findByIdOrNull(inquiryId) ?: throw NotFoundException("inquiryId: $inquiryId does not exist")
+
     /** TODO: 동적쿼리 추가 */
     fun getInquiriesResponse(itemId: Long, pageable: Pageable)
         = inquiryRepository.findAllByItemId(itemId, pageable).map { it.toResponse() }
+
     /** TODO: 동적쿼리 추가 */
     fun getUserInquiriesResponse(userId: Long, pageable: Pageable)
         = inquiryRepository.findAllByUserId(userId, pageable).map { it.toUserResponse() }
+
     @Transactional
     fun createInquiry(userId: Long, itemId: Long, inquiryCreateRequest: InquiryCreateRequest)
         = inquiryRepository.save(
@@ -41,6 +41,7 @@ class ItemInquiryService(
             item = itemService.getItem(itemId)
         }
     ).toResponse()
+
     @Transactional
     fun updateInquiry(inquiryId: Long, inquiryUpdateRequest: InquiryUpdateRequest)
         = inquiryRepository.save(
@@ -74,6 +75,7 @@ class ItemInquiryService(
         }.also {
             inquiryFileRepository.save(it)
         }.toResponse()
+
     @Transactional
     fun createInquiryFiles(inquiryId: Long, files: List<MultipartFile>)
         = files.map {
@@ -104,6 +106,7 @@ class ItemInquiryService(
 
     // 문의글 답글
     fun getInquiryReply(replyId: Long) = inquiryReplyRepository.findByIdOrNull(replyId) ?: throw NotFoundException("replyId:$replyId does not exist")
+
     @Transactional
     fun createInquiryReply(userId: Long, inquiryId: Long, content: String)
         = InquiryReply(
@@ -113,6 +116,7 @@ class ItemInquiryService(
         ).also {
             inquiryReplyRepository.save(it)
         }.toResponse()
+
     @Transactional
     fun updateInquiryReply(userId: Long, inquiryId: Long, replyId: Long, content: String)
         = getInquiryReply(replyId)
@@ -121,6 +125,7 @@ class ItemInquiryService(
         }.also {
             inquiryReplyRepository.save(it)
         }.toResponse()
+
     @Transactional
     fun deleteInquiryReply(userId: Long, inquiryId: Long, replyId: Long)
         = inquiryReplyRepository.delete(

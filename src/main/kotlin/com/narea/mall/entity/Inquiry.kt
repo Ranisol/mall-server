@@ -17,10 +17,8 @@ class Inquiry:BaseTimeEntity() {
     @OneToMany(mappedBy = "inquiry", orphanRemoval = true, cascade = [CascadeType.ALL])
     var replies: List<InquiryReply> = emptyList()
     @ManyToOne(optional = false, fetch = FetchType.LAZY) // optional: nullable false와 같은 역할
-    @JoinColumn(nullable = false)
     var item:Item = Item()
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
     var user:User = User()
 }
 
@@ -43,7 +41,6 @@ class InquiryReply (
     var id: Long = 0,
     var content:String = EMPTY_STRING,
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(nullable = false)
     var inquiry:Inquiry = Inquiry(),
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     var user:User = User()

@@ -33,6 +33,7 @@ class ItemService(
         itemRepository.findAll(pageable).map { entity ->
             entity.toResponse()
         }
+
     @Transactional
     fun createItem(itemCreateRequest: ItemCreateRequest): ItemResponse =
         itemCreateRequest.toEntity().apply {
@@ -45,6 +46,7 @@ class ItemService(
         }.also { item ->
             itemRepository.save(item) // cascade all
         }.toResponse()
+
     @Transactional
     fun updateItem(itemId:Long, itemUpdateRequest: ItemUpdateRequest):ItemResponse =
         getItem(itemId).apply {
@@ -61,6 +63,7 @@ class ItemService(
         }.also { item ->
             itemRepository.save(item)
         }.toResponse()
+
     @Transactional
     fun deleteItem(itemId: Long) =
         itemRepository.delete(
@@ -99,6 +102,4 @@ class ItemService(
         }
     }
     fun getItemFileDir(itemId:Long) = "itemFile/${itemId}"
-
-
 }

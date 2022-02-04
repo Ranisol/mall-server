@@ -74,7 +74,7 @@ fun Reviews.toUserResponse() =
     UserReviewMapper.INSTANCE.fromEntity(this).also { res ->
         res.item.categoryList =
             this.item.itemCategories.map {
-                itemCategory ->  itemCategory.category // TODO: Mapstruct 에서 item categories -> categoryList 로 바꿔주는거 찾아보기
+                itemCategory ->  itemCategory.category // TODO: Mapstruct 에서 item categories -> categoryList 로 바꿔줄 수 있는지?
             }
     }
 

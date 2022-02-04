@@ -19,31 +19,25 @@ import java.util.*
 class BasketService (
     private val basketRepository: BasketRepository,
     private val basketItemRepository: BasketItemRepository,
-    private val userRepository: UserRepository, // only for createBasket
-    private val userService: UserService,
     private val itemService: ItemService
         ) {
-    @Transactional
-    fun createBasket(userId: Long) = userRepository.save( //
-        userService.getUser(userId).apply {
-            basket = Basket(
-                user = this
-            )
-        }
-    )
+
     fun getBasket(userId: Long): Basket =
         basketRepository.findByUserId(userId) ?: throw NotFoundException("userId:$userId basket does not exist, create basket first")
+
     fun getBasketItem(basketItemId: Long): BasketItem =
         basketItemRepository.findByIdOrNull(basketItemId) ?: throw NotFoundException("basketItemId:$basketItemId does not exist")
+
     fun getBasketResponse(userId: Long): BasketResponse = getBasket(userId).toResponse()
+
     @Transactional
-    fun addBasketItem(userId: Long, basketAddItemRequest: BasketItemAddRequest): BasketResponse =
+    fun addBasketItem(userId: Long, basketItemAddRequest: BasketItemAddRequest): BasketResponse =
         getBasket(userId).apply {
             basketItems.add(
                 BasketItem(
                     basket = this,
-                    count = basketAddItemRequest.count,
-                    item = itemService.getItem(basketAddItemRequest.itemId)
+                    count = basketItemAddRequest.count,
+                    item = itemService.getItem(basketItemAddRequest.itemId)
                 )
             )
         }.also { basket ->
@@ -55,10 +49,20 @@ class BasketService (
         basketItemRepository.delete(
             getBasketItem(basketItemId)
         )
+
     @Transactional
     fun updateBasketItem(userId: Long, basketItemId: Long, count: Int) =
         getBasketItem(basketItemId).let { basketItem ->
             basketItem.count = count
             basketItemRepository.save(basketItem)
         }.toResponse()
+
+    @Transactional
+    fun clearBasket(userId: Long) =
+        getBasket(userId).let {  basket ->
+            basket.basketItems = arrayListOf()
+            basketRepository.save(basket)
+            basket.toResponse()
+        }
+
 }

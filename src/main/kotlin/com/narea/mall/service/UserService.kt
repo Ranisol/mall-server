@@ -5,6 +5,7 @@ import com.narea.mall.entity.User
 import com.narea.mall.exception.NotFoundException
 import com.narea.mall.exception.UserEmailExistException
 import com.narea.mall.repository.UserRepository
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -31,8 +32,8 @@ class UserService(
     fun getUser(email: String) = userRepository.findByEmail(email) ?: throw NotFoundException("user not exist:$email")
     fun getUser(userId: Long) =
         userRepository.findByIdOrNull(userId) ?: throw NotFoundException("user not found $userId")
-
-    fun getUsers(): List<User> = userRepository.findAll()
+    fun getUserResponse(userId: Long) = getUser(userId).toResponse()
+    fun getUsersResponse(pageable: Pageable) = userRepository.findAll(pageable).map { it.toResponse() }
     @Transactional
     fun createUser(userCreateRequest: UserCreateRequest): UserResponse {
         val user = userRepository.findByEmail(userCreateRequest.email)
@@ -44,8 +45,7 @@ class UserService(
                     user = this
                 )
             }
-            .let { user -> userRepository.save(user)
-            }.toResponse()
+            .let { userRepository.save(it) }.toResponse()
     }
     @Transactional
     fun createUsers(userCreateRequests: List<UserCreateRequest>): List<UserResponse>{
