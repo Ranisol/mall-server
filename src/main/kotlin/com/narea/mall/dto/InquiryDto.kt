@@ -28,7 +28,7 @@ data class InquiryResponse (
     var onlyAdminCanSee: Boolean = false,
     var files:List<InquiryFileResponse> = emptyList(),
     var replies: List<InquiryReplyResponse> = emptyList(),
-    var user: User = User()
+    var user: UserResponse = UserResponse()
 )
 
 data class UserInquiryResponse (
@@ -38,7 +38,7 @@ data class UserInquiryResponse (
     var onlyAdminCanSee: Boolean = false,
     var files:List<InquiryFileResponse> = emptyList(),
     var replies: List<InquiryReplyResponse> = emptyList(),
-    var item: Item = Item()
+    var item: ItemResponse = ItemResponse()
 )
 
 data class InquiryFileResponse (
@@ -66,7 +66,10 @@ interface UserInquiryMapper: ResponseMapper<UserInquiryResponse, Inquiry> {
 
 fun InquiryCreateRequest.toEntity() = InquiryMapper.INSTANCE.toEntity(this)
 fun Inquiry.toResponse() = InquiryMapper.INSTANCE.fromEntity(this)
-fun Inquiry.toUserResponse() = UserInquiryMapper.INSTANCE.fromEntity(this)
+fun Inquiry.toUserResponse() =
+    UserInquiryMapper.INSTANCE.fromEntity(this).also {
+        it.item.categoryList = this.item.itemCategories.map { itemCategory -> itemCategory.category }
+    }
 
 @Mapper
 interface InquiryFileMapper: ResponseMapper<InquiryFileResponse, InquiryFile> {

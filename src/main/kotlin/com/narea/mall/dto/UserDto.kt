@@ -7,6 +7,7 @@ import com.narea.mall.entity.User
 import com.narea.mall.utils.EMPTY_STRING
 import com.narea.mall.utils.NOT_BE_EMPTY
 import org.mapstruct.Mapper
+import org.mapstruct.Mapping
 import org.mapstruct.factory.Mappers
 import java.time.LocalDateTime
 import javax.validation.constraints.NotBlank
@@ -34,7 +35,8 @@ data class UserResponse (
     var email:String = EMPTY_STRING,
     var mobileNumber:String? = EMPTY_STRING,
     var role:String = Role.USER.toString(),
-    var createDate: LocalDateTime? = null
+    var createDate: LocalDateTime? = null,
+    var basket: BasketResponse = BasketResponse()
 )
 
 

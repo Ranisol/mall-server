@@ -17,16 +17,16 @@ data class ItemCreateRequest (
     @field:NotBlank(message = NOT_BE_EMPTY)
     var name: String = StringUtils.EMPTY,
     var description:String = StringUtils.EMPTY,
-    var price:Long = 0,
-    var inventory:Long = 0,
+    var price: Int = 0,
+    var inventory: Int = 0,
     var categoryIds: List<Long> = emptyList()
 )
 
 data class ItemUpdateRequest (
     var name: String? = null,
     var description:String? = null,
-    var price:Long? = null,
-    var inventory:Long? = null,
+    var price: Int? = null,
+    var inventory: Int? = null,
     var categories:List<Long>? = null,
 )
 
@@ -35,8 +35,8 @@ data class ItemResponse (
     var id:Long = 0,
     var name:String = StringUtils.EMPTY,
     var description:String = StringUtils.EMPTY,
-    var price:Long = 0,
-    var inventory:Long = 0,
+    var price: Int = 0,
+    var inventory: Int = 0,
     var files:List<ItemFileResponse> = emptyList(),
     var categoryList:List<Category> = emptyList()
 )
@@ -52,7 +52,11 @@ interface ItemMapper: RequestMapper<ItemCreateRequest, Item>, ResponseMapper<Ite
         val INSTANCE: ItemMapper = Mappers.getMapper(ItemMapper::class.java)
     }
 }
-fun Item.toResponse() = ItemMapper.INSTANCE.fromEntity(this)
+fun Item.toResponse() =
+    ItemMapper.INSTANCE.fromEntity(this).also { res ->
+        res.categoryList = this.itemCategories.map { itemCategory -> itemCategory.category }
+    }
+
 fun ItemCreateRequest.toEntity() = ItemMapper.INSTANCE.toEntity(this)
 
 @Mapper

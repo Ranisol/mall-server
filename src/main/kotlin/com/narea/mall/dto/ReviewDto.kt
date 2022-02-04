@@ -70,7 +70,13 @@ interface UserReviewMapper: ResponseMapper<UserReviewResponse, Reviews> {
 
 fun ReviewCreateRequest.toEntity() = ReviewsMapper.INSTANCE.toEntity(this)
 fun Reviews.toResponse() = ReviewsMapper.INSTANCE.fromEntity(this)
-fun Reviews.toUserResponse() = UserReviewMapper.INSTANCE.fromEntity(this)
+fun Reviews.toUserResponse() =
+    UserReviewMapper.INSTANCE.fromEntity(this).also { res ->
+        res.item.categoryList =
+            this.item.itemCategories.map {
+                itemCategory ->  itemCategory.category // TODO: Mapstruct 에서 item categories -> categoryList 로 바꿔줄 수 있는지?
+            }
+    }
 
 
 

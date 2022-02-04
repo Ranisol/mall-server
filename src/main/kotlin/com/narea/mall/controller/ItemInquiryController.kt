@@ -31,7 +31,6 @@ class ItemInquiryController(
         @Parameter(hidden = true)
         pageable: Pageable
     ) = inquiryService.getInquiriesResponse(itemId, pageable)
-
 }
 
 // private

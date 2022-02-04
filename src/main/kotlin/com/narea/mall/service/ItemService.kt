@@ -6,6 +6,7 @@ import com.narea.mall.entity.ItemCategory
 import com.narea.mall.entity.ItemFile
 import com.narea.mall.exception.BadRequestException
 import com.narea.mall.exception.NotFoundException
+import com.narea.mall.repository.ItemCategoryRepository
 import com.narea.mall.repository.ItemFileRepository
 import com.narea.mall.repository.ItemRepository
 
@@ -20,44 +21,32 @@ import org.springframework.web.multipart.MultipartFile
 class ItemService(
     private val itemRepository: ItemRepository,
     private val itemFileRepository: ItemFileRepository,
+    private val itemCategoryRepository: ItemCategoryRepository,
     private val categoryService: CategoryService,
     private val s3Service: S3Service,
 ) {
 
     fun getItem(itemId:Long):Item = itemRepository.findByIdOrNull(itemId) ?: throw NotFoundException("$itemId not exist")
-    fun getItemResponse(itemId: Long): ItemResponse =
-        getItem(itemId).let { item ->
-            item.toResponse().also { res ->
-                res.categoryList = item.categories.map {
-                    itemCategory -> itemCategory.category
-                }
-            }
-        }
+    fun getItemResponse(itemId: Long): ItemResponse = getItem(itemId).toResponse()
     /** TODO: 동적쿼리 추가 */
     fun getItemsResponse(pageable: Pageable) =
         itemRepository.findAll(pageable).map { entity ->
-            entity.toResponse().apply {
-                categoryList = entity.categories.map { it.category }
-            }
+            entity.toResponse()
         }
+
     @Transactional
-    fun createItemWithoutCategory(itemCreateRequest: ItemCreateRequest) =
-        itemCreateRequest.toEntity().let {
-            itemRepository.save(it)
-        }
-    @Transactional
-    fun createItem(itemCreateRequest: ItemCreateRequest) =
-        createItemWithoutCategory(itemCreateRequest).apply {
-            categories = itemCreateRequest.categoryIds.map { categoryId ->
+    fun createItem(itemCreateRequest: ItemCreateRequest): ItemResponse =
+        itemCreateRequest.toEntity().apply {
+            itemCategories = itemCreateRequest.categoryIds.map { id ->
                 ItemCategory(
-                    category = categoryService.getCategory(categoryId),
+                    category = categoryService.getCategory(id),
                     item = this
                 )
             }
-        }.also {
-            println("item ${it.categories}")
-            itemRepository.save(it) // response에 반영되지 않는 문제, 개선 필요
+        }.also { item ->
+            itemRepository.save(item) // cascade all
         }.toResponse()
+
     @Transactional
     fun updateItem(itemId:Long, itemUpdateRequest: ItemUpdateRequest):ItemResponse =
         getItem(itemId).apply {
@@ -65,13 +54,16 @@ class ItemService(
             description = itemUpdateRequest.description ?: description
             price = itemUpdateRequest.price ?: price
             inventory = itemUpdateRequest.inventory ?: inventory
-            categories = itemUpdateRequest.categories?.map { categoryId ->
+            itemCategories = itemUpdateRequest.categories?.map { categoryId ->
                 ItemCategory(
                     item = this,
                     category = categoryService.getCategory(categoryId)
                 )
-            } ?: categories
-        }.also { itemRepository.save(it) }.toResponse()
+            } ?: itemCategories
+        }.also { item ->
+            itemRepository.save(item)
+        }.toResponse()
+
     @Transactional
     fun deleteItem(itemId: Long) =
         itemRepository.delete(
@@ -110,6 +102,4 @@ class ItemService(
         }
     }
     fun getItemFileDir(itemId:Long) = "itemFile/${itemId}"
-
-
 }

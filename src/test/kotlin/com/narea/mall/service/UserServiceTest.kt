@@ -21,10 +21,12 @@ class UserServiceTest(
 
     @Test
     fun `유저 생성이 작동하는지 확인`() {
+        // when
         val userRequest = UserCreateRequest(
             name = "test",
             email = "aamm10@naver.com"
         )
+        // then
         userService.createUser(userRequest)
         val user = userService.getUser("aamm10@naver.com")
         println("check user is exist: $user")

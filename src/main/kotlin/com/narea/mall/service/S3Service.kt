@@ -25,28 +25,36 @@ class S3Service(private val amazonS3: AmazonS3,
         if (originalFilename.isNullOrEmpty()) {
             throw BadRequestException("Upload file name is empty")
         }
-        val fileName = "$dirName/${originalFilename.encodeUtf8()}"
-        return putS3(uploadFile, fileName)       // 업로드 된 파일의 s3 URL 주소 반환
+        // 업로드 된 파일의 s3 URL 주소 반환
+        return putS3(
+            uploadFile = uploadFile ,
+            fileName =  "$dirName/${originalFilename.encodeUtf8()}"
+        )
     }
 
-    private fun putS3(uploadFile: MultipartFile, fileName: String): String {
-        val metadata = ObjectMetadata().apply {
+    private fun putS3(uploadFile: MultipartFile, fileName: String): String =
+         ObjectMetadata().apply {
             contentType = uploadFile.contentType
             contentLength = uploadFile.size
+         }.let { objectMetadata ->
+            amazonS3.putObject(
+                PutObjectRequest(
+                    bucketName, fileName, uploadFile.inputStream, objectMetadata
+                )
+            )
+            amazonS3.getUrl(bucketName, fileName).toString()
         }
-        println("metadata, $metadata")
-        val putObjectRequest = PutObjectRequest(bucketName, fileName, uploadFile.inputStream, metadata)
-            .withCannedAcl(CannedAccessControlList.PublicRead)
-        amazonS3.putObject(putObjectRequest)
-        return amazonS3.getUrl(bucketName, fileName).toString()
-    }
+
 
     fun delete(fileUrl: String) {
-        if (fileUrl.isEmpty()) {
-            return
-        }
+        if (fileUrl.isEmpty()) return
         val fileName = URI(fileUrl).path.removePrefix("/")
-        amazonS3.deleteObject(DeleteObjectRequest(bucketName, fileName))
+        amazonS3.deleteObject(
+            DeleteObjectRequest(
+                bucketName,
+                fileName
+            )
+        )
     }
 
     private fun String.encodeUtf8() = URLEncoder.encode(this, Charsets.UTF_8)

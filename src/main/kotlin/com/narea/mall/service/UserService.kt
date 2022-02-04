@@ -1,8 +1,11 @@
 package com.narea.mall.service
 import com.narea.mall.dto.*
+import com.narea.mall.entity.Basket
 import com.narea.mall.entity.User
 import com.narea.mall.exception.NotFoundException
+import com.narea.mall.exception.UserEmailExistException
 import com.narea.mall.repository.UserRepository
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -22,23 +25,27 @@ class UserService(
         return org.springframework.security.core.userdetails.User(
             user.email,
             user.password,
-            arrayListOf(SimpleGrantedAuthority(user.role as String))
+            arrayListOf(SimpleGrantedAuthority(user.role))
         )
     }
 
     fun getUser(email: String) = userRepository.findByEmail(email) ?: throw NotFoundException("user not exist:$email")
     fun getUser(userId: Long) =
         userRepository.findByIdOrNull(userId) ?: throw NotFoundException("user not found $userId")
-
-    fun getUsers(): List<User> = userRepository.findAll()
+    fun getUserResponse(userId: Long) = getUser(userId).toResponse()
+    fun getUsersResponse(pageable: Pageable) = userRepository.findAll(pageable).map { it.toResponse() }
     @Transactional
     fun createUser(userCreateRequest: UserCreateRequest): UserResponse {
+        val user = userRepository.findByEmail(userCreateRequest.email)
+        if(user != null) throw UserEmailExistException("user email:${userCreateRequest.email} already exist")
         return userCreateRequest.toEntity()
             .apply {
                 password = passwordEncoder.encode(userCreateRequest.password)
+                basket = Basket(
+                    user = this
+                )
             }
-            .let { user -> userRepository.save(user)
-            }.toResponse()
+            .let { userRepository.save(it) }.toResponse()
     }
     @Transactional
     fun createUsers(userCreateRequests: List<UserCreateRequest>): List<UserResponse>{
