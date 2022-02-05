@@ -1,12 +1,12 @@
 package com.narea.mall.service
 
 import com.narea.mall.dto.OrderCreateRequest
+import com.narea.mall.dto.OrderParams
 import com.narea.mall.dto.toResponse
 import com.narea.mall.entity.*
 import com.narea.mall.exception.BadRequestException
 import com.narea.mall.exception.NotFoundException
 import com.narea.mall.repository.OrderRepository
-import com.narea.mall.repository.custom.OrderParams
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service

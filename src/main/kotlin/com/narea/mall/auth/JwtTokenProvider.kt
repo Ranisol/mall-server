@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
@@ -23,8 +22,8 @@ class JwtTokenProvider(@Value("\${jwt.secret}") secretKey: String) {
     companion object {
 
         private const val ROLES = "roles"
-        private const val ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 100
-        private const val REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 100
+        private const val ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30 // 30분
+        private const val REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 3 // 3일
     }
 
     private val key: Key = Keys.hmacShaKeyFor(
@@ -51,10 +50,7 @@ class JwtTokenProvider(@Value("\${jwt.secret}") secretKey: String) {
     fun getAuthenticationFromAccessToken(accessToken: String): Authentication {
         // 토큰 복호화
         val claims = parseClaims(accessToken)
-        val authorities: Collection<GrantedAuthority?> =
-            Arrays.stream(claims[ROLES].toString().split(",").toTypedArray())
-                .map { role: String? -> SimpleGrantedAuthority(role) }
-                .collect(Collectors.toList())
+        val authorities: Collection<GrantedAuthority?> = arrayListOf()
         val principal: UserDetails = User(claims.subject, "", authorities)
         return UsernamePasswordAuthenticationToken(principal, "", authorities)
     }

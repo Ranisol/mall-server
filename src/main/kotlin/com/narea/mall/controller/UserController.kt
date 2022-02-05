@@ -23,12 +23,8 @@ import javax.validation.Valid
 class UserController(
     private val userService: UserService
 ){
-    @Operation(summary = "토큰으로 유저 조회")
-    @ApiResponses()
-    @GetMapping("/me")
-    fun getMe(){}
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("@authService.hasAuthByUserId(#userId)")
     @Operation(summary = "유저 조회")
     @ApiResponses()
     @GetMapping("/{userId}")
@@ -36,23 +32,8 @@ class UserController(
         @PathVariable userId:Long
     ) = userService.getUserResponse(userId)
 
-    @Operation(summary = "유저 목록 조회 ")
-    @ApiResponses()
-    @GetMapping
-    fun getUsers(
-        @PageableDefault
-        @Parameter(hidden = true)
-        pageable: Pageable
-    ) = userService.getUsersResponse(pageable)
 
-    @Operation(summary = "유저 생성")
-    @ApiResponses()
-    @PostMapping
-    fun createUser(
-        @RequestBody @Valid
-        userCreateRequest: UserCreateRequest
-    ) = userService.createUser(userCreateRequest)
-
+    @PreAuthorize("@authService.hasAuthByUserId(#userId)")
     @Operation(summary = "유저 수정")
     @ApiResponses()
     @PatchMapping("/{userId}")

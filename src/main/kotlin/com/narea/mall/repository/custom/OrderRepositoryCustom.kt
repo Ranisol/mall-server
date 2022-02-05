@@ -1,5 +1,6 @@
 package com.narea.mall.repository.custom
 
+import com.narea.mall.dto.OrderParams
 import com.narea.mall.dto.OrderResponse
 import com.narea.mall.entity.*
 import com.querydsl.core.types.dsl.BooleanExpression
@@ -15,40 +16,33 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
-data class OrderParams (
-    val startDate: LocalDate? = null,
-    val endDate: LocalDate? = null,
-    val deliveryStatus: DeliveryStatus? = null,
-    val orderStatus: OrderStatus? = null
-)
+
 
 @Repository
 interface OrderRepositoryCustom {
     fun findOrdersByParamsAndUserId(userId: Long, params: OrderParams, pageable: Pageable): Page<Orders>
-   // fun findOrderResponsesByParams(params: OrderParams, pageable: Pageable): Page<OrderResponse>
 }
 
 class OrderRepositoryImpl (
     private val jpaQueryFactory: JPAQueryFactory
-): QuerydslRepositorySupport(Orders::class.java), OrderRepositoryCustom {
+): OrderRepositoryCustom {
 
     val orders: QOrders = QOrders.orders
     val user: QUser = QUser.user
     val delivery: QDelivery = QDelivery.delivery
 
-    override fun findOrdersByParamsAndUserId(userId: Long, params: OrderParams, pageable: Pageable): Page<Orders> { //
-        pageable.sort
-        val query = jpaQueryFactory.from(orders)
+    override fun findOrdersByParamsAndUserId(userId: Long, params: OrderParams, pageable: Pageable): Page<Orders> {
+        val results = jpaQueryFactory.selectFrom(orders)
             .where(
                 orders.user.id.eq(userId),
                 eqOrderStatus(params.orderStatus),
                 betweenDate(params.startDate, params.endDate),
                 eqDeliveryStatus(params.deliveryStatus)
             )
-
-        val totalEl = query.fetchCount()
-        val results: List<Orders> = querydsl!!.applyPagination(pageable, query).fetch() as List<Orders>
-        return PageImpl(results, pageable, totalEl)
+            .offset(pageable.offset)
+            .limit(pageable.pageSize.toLong())
+            .fetch()
+        return PageImpl(results, pageable, results.size.toLong())
     }
 
     private fun eqOrderStatus(orderStatus: OrderStatus?): BooleanExpression? {

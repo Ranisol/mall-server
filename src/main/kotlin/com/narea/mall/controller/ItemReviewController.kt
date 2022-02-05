@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.MediaType
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import javax.validation.Valid
@@ -50,6 +51,7 @@ class UserItemReviewController(
 ) {
 
     @Operation(summary = "아이템 리뷰 생성")
+    @PreAuthorize("@authService.hasAuthByUserId(#userId)")
     @PostMapping
     fun createUserReview(
         @PathVariable userId:Long,
@@ -59,6 +61,7 @@ class UserItemReviewController(
 
     /** TODO: 동적 쿼리 추가 예정 */
     @Operation(summary = "유저별 아이템 리뷰 목록 조회")
+    @PreAuthorize("@authService.hasAuthByUserId(#userId)")
     @GetMapping
     fun getUserReviews(
         @PathVariable userId: Long,
@@ -69,6 +72,7 @@ class UserItemReviewController(
     ) = itemReviewService.getUserItemReviewsResponse(userId, pageable)
 
     @Operation(summary = "아이템 리뷰 수정")
+    @PreAuthorize("@authService.hasAuthByUserId(#userId)")
     @PutMapping("/{reviewId}")
     fun updateUserReview(
         @PathVariable userId: Long,
@@ -78,6 +82,7 @@ class UserItemReviewController(
     ) = itemReviewService.updateReview(reviewId, updateRequest)
 
     @Operation(summary = "아이템 리뷰 제거")
+    @PreAuthorize("@authService.hasAuthByUserId(#userId)")
     @DeleteMapping("/{reviewId}")
     fun deleteUserReview(
         @PathVariable userId: Long,
@@ -87,6 +92,7 @@ class UserItemReviewController(
 
     // 리뷰 이미지
     @Operation(summary = "아이템 리뷰 이미지 생성")
+    @PreAuthorize("@authService.hasAuthByUserId(#userId)")
     @PostMapping("/{reviewId}/images",
         consumes = [MediaType.MULTIPART_FORM_DATA_VALUE]
         )
@@ -99,6 +105,7 @@ class UserItemReviewController(
     ) = itemReviewService.createReviewFile(reviewId, multipartFile)
 
     @Operation(summary = "아이템 리뷰 이미지 수정")
+    @PreAuthorize("@authService.hasAuthByUserId(#userId)")
     @PutMapping(
         "/{reviewId}/images/{fileId}",
         consumes = [MediaType.MULTIPART_FORM_DATA_VALUE]
@@ -112,6 +119,7 @@ class UserItemReviewController(
     ) = itemReviewService.updateReviewFile(reviewId, fileId, multipartFile)
 
     @Operation(summary = "아이템 리뷰 이미지 삭제")
+    @PreAuthorize("@authService.hasAuthByUserId(#userId)")
     @DeleteMapping("/{reviewId}/images/{fileId}")
     fun deleteUserReviewImage(
         @PathVariable userId: Long,

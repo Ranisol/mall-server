@@ -7,6 +7,7 @@ import javax.persistence.*
 
 enum class Role (role:String) {
     USER("ROLE_USER"),
+    ADMIN("ROLE_ADMIN")
 }
 
 @Entity
@@ -26,7 +27,7 @@ class User (
 
     @Column(nullable = false)
     var password: String = EMPTY_STRING,
-    var role: String = "ROLE_USER",
+    var role: Role = Role.USER,
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true) // 라이프사이클 동일하게
     var userAddresses:List<UserAddress> = emptyList(),

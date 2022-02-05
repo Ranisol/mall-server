@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.MediaType
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import java.sql.RowId
@@ -57,8 +58,10 @@ class ItemController (
 class ItemManageController (
       private val itemService: ItemService
     ) {
+
     @Operation(summary = "아이템 생성", description = "어드민 전용")
     @ApiResponses()
+    @PreAuthorize("@authService.hasAuthByUserId(#userId)")
     @PostMapping
     fun createItem(
         @RequestBody @Valid
@@ -68,6 +71,7 @@ class ItemManageController (
 
     @Operation(summary = "아이템 수정", description = "어드민 전용")
     @ApiResponses()
+    @PreAuthorize("@authService.hasAuthByUserId(#userId)")
     @PutMapping("/{itemId}")
     fun updateItem(
         @PathVariable itemId: Long,
@@ -77,6 +81,7 @@ class ItemManageController (
 
     @Operation(summary = "아이템 삭제", description = "어드민 전용")
     @ApiResponses()
+    @PreAuthorize("@authService.hasAuthByUserId(#userId)")
     @DeleteMapping("/{itemId}")
     fun deleteItem(
         @PathVariable itemId: Long,
@@ -86,6 +91,7 @@ class ItemManageController (
 
     // 아이템 이미지
     @Operation(summary = "아이템 이미지 생성", description = "어드민 전용")
+    @PreAuthorize("@authService.hasAuthByUserId(#userId)")
     @PostMapping("/{itemId}/images",
         consumes = [MediaType.MULTIPART_FORM_DATA_VALUE],
     )
@@ -96,6 +102,7 @@ class ItemManageController (
     ) = itemService.createItemImages(itemId, multipartFiles)
 
     @Operation(summary = "아이템 이미지 수정", description = "어드민 전용")
+    @PreAuthorize("@authService.hasAuthByUserId(#userId)")
     @PutMapping("/{itemId}/images/{fileId}",
         consumes = [MediaType.MULTIPART_FORM_DATA_VALUE],
     )
@@ -106,6 +113,7 @@ class ItemManageController (
     ) = itemService.updateItemImage(itemId, fileId, multipartFile)
 
     @Operation(summary = "아이템 이미지 삭제", description = "어드민 전용")
+    @PreAuthorize("@authService.hasAuthByUserId(#userId)")
     @DeleteMapping("/{itemId}/images/{fileId}")
     fun deleteItemImage(
         @PathVariable itemId: Long,

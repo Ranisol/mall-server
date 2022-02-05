@@ -138,12 +138,17 @@ class OrderRepositoryTest(
                 delivery = Delivery(status = DeliveryStatus.PREPARED, order = this)
             },
         ))
-        val result = orderRepository.findOrdersByParamsAndUserId(
+        val result1 = orderRepository.findOrdersByParamsAndUserId(
             user.id,
             OrderParams(),
             PageRequest.of(0, 1)
         )
-        println(result.content[0].user)
+        val result2 = orderRepository.findOrdersByParamsAndUserId(
+            user.id,
+            OrderParams(),
+            PageRequest.of(0, 10)
+        )
+        println(result1.content[0] == result2.content[0]) // querydsl의 쿼리는 무조건 추가로 나간다. 하지만 동등함
 
     }
 

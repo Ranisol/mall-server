@@ -7,7 +7,6 @@ import com.narea.mall.exception.UserEmailExistException
 import com.narea.mall.repository.UserRepository
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -25,7 +24,7 @@ class UserService(
         return org.springframework.security.core.userdetails.User(
             user.email,
             user.password,
-            arrayListOf(SimpleGrantedAuthority(user.role))
+            arrayListOf()
         )
     }
 

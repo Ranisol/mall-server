@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 
-
+// 인증 자체가 존재하는지 판단
 class JwtFilter(
     private val jwtTokenProvider: JwtTokenProvider
 )  : OncePerRequestFilter() {
