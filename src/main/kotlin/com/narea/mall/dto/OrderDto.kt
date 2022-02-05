@@ -1,8 +1,10 @@
 package com.narea.mall.dto
 
+import com.narea.mall.entity.DeliveryStatus
 import com.narea.mall.entity.OrderStatus
 import com.narea.mall.entity.Orders
 import com.narea.mall.entity.OrdersItem
+import java.time.LocalDate
 
 data class OrderCreateRequest(
     var count: Int,
@@ -22,6 +24,13 @@ data class OrderItemResponse(
     var count: Int = 0,
     var itemsPrice: Int = 0,
     var item: ItemResponse = ItemResponse()
+)
+
+data class OrderParams (
+    val startDate: LocalDate? = null,
+    val endDate: LocalDate? = null,
+    val deliveryStatus: DeliveryStatus? = null,
+    val orderStatus: OrderStatus? = null
 )
 
 fun Orders.toResponse(): OrderResponse =

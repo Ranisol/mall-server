@@ -4,11 +4,13 @@ import com.narea.mall.dto.LoginRequest
 import com.narea.mall.dto.ReissueRequest
 import com.narea.mall.dto.TokenResponse
 import com.narea.mall.entity.RefreshToken
+import com.narea.mall.entity.Role
+import com.narea.mall.exception.ForbiddenException
 import com.narea.mall.repository.RefreshTokenRepository
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
-import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.User
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -22,11 +24,19 @@ class AuthService (
     private val refreshTokenRepository: RefreshTokenRepository,
     private val userService: UserService
 ) {
+    fun hasAuthByUserId(userId: Long): Boolean {
+        val authenticatedUser = userService.getUser(
+            SecurityContextHolder.getContext().authentication.name
+        )
+        if(authenticatedUser.role == Role.ADMIN) return true
+        if(userId != authenticatedUser.id) throw ForbiddenException("userId $userId cannot access to userId${authenticatedUser.id}'s resource")
+        return true
+    }
     @Transactional
     fun login(loginRequest: LoginRequest): TokenResponse {
         val user = userService.getUser(loginRequest.email)
         val authenticationToken = UsernamePasswordAuthenticationToken(
-            User(user.email, user.password, arrayListOf(SimpleGrantedAuthority(user.role))),
+            User(user.email, user.password, arrayListOf()),
             loginRequest.password
         )
         val authentication = authenticationManagerBuilder.`object`.authenticate(authenticationToken)
