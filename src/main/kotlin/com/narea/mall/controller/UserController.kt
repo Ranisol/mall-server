@@ -32,10 +32,9 @@ class UserController(
         @PathVariable userId:Long
     ) = userService.getUserResponse(userId)
 
-
-    @PreAuthorize("@authService.hasAuthByUserId(#userId)")
-    @Operation(summary = "유저 수정")
+    @Operation(summary = "유저 정보 수정")
     @ApiResponses()
+    @PreAuthorize("@authService.hasAuthByUserId(#userId)")
     @PatchMapping("/{userId}")
     fun updateUser(
         @PathVariable
@@ -43,6 +42,20 @@ class UserController(
         @RequestBody @Valid
         userUpdateRequest: UserUpdateRequest
     ) = userService.updateUser(userId, userUpdateRequest)
+
+
+    // admin
+    @Operation(summary = "유저 목록 조회 ")
+    @ApiResponses()
+    @PreAuthorize("@authService.hasAdminAuth(#userId)")
+    @GetMapping
+    fun getUsers(
+        @PageableDefault
+        @Parameter(hidden = true)
+        pageable: Pageable
+    ) = userService.getUsersResponse(pageable)
+
+
 
 }
 

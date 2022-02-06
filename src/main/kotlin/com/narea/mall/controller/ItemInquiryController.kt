@@ -43,7 +43,7 @@ class UserItemInquiryController(
     private val inquiryService: ItemInquiryService
 ) {
     @Operation(summary = "유저별 문의글 리스트 조회", description = "")
-    @PreAuthorize("@authService.hasAuthByUserId(#userId)")
+    @PreAuthorize("@authService.hasAdminAuth(#userId)")
     @GetMapping
     fun getUserInquiries(
         @PathVariable userId: Long,
@@ -121,7 +121,7 @@ class UserItemInquiryController(
 
     /** 문의글 답글 */
     @Operation(summary = "아이템 문의글 답글 등록", description = "어드민 전용")
-    @PreAuthorize("@authService.hasAuthByUserId(#userId)")
+    @PreAuthorize("@authService.hasAdminAuth(#userId)")
     @PostMapping("/{inquiryId}/reply")
     fun createUserInquiryReply(
         @PathVariable userId: Long,
@@ -131,7 +131,7 @@ class UserItemInquiryController(
     ) = inquiryService.createInquiryReply(userId, inquiryId, content)
 
     @Operation(summary = "아이템 문의글 답글 수정", description = "어드민 전용")
-    @PreAuthorize("@authService.hasAuthByUserId(#userId)")
+    @PreAuthorize("@authService.hasAdminAuth(#userId)")
     @PutMapping("/{inquiryId}/reply/{replyId}")
     fun updateUserInquiryReply(
         @PathVariable userId: Long,
@@ -142,7 +142,7 @@ class UserItemInquiryController(
     ) = inquiryService.updateInquiryReply(userId, inquiryId, replyId, content)
 
     @Operation(summary = "아이템 문의글 답글 삭제", description = "어드민 전용")
-    @PreAuthorize("@authService.hasAuthByUserId(#userId)")
+    @PreAuthorize("@authService.hasAdminAuth(#userId)")
     @DeleteMapping("/{inquiryId}/reply/{replyId}")
     fun deleteUserInquiryReply(
         @PathVariable userId: Long,

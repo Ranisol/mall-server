@@ -61,7 +61,7 @@ class ItemManageController (
 
     @Operation(summary = "아이템 생성", description = "어드민 전용")
     @ApiResponses()
-    @PreAuthorize("@authService.hasAuthByUserId(#userId)")
+    @PreAuthorize("@authService.hasAdminAuth(#userId)")
     @PostMapping
     fun createItem(
         @RequestBody @Valid
@@ -71,7 +71,7 @@ class ItemManageController (
 
     @Operation(summary = "아이템 수정", description = "어드민 전용")
     @ApiResponses()
-    @PreAuthorize("@authService.hasAuthByUserId(#userId)")
+    @PreAuthorize("@authService.hasAdminAuth(#userId)")
     @PutMapping("/{itemId}")
     fun updateItem(
         @PathVariable itemId: Long,
@@ -81,7 +81,7 @@ class ItemManageController (
 
     @Operation(summary = "아이템 삭제", description = "어드민 전용")
     @ApiResponses()
-    @PreAuthorize("@authService.hasAuthByUserId(#userId)")
+    @PreAuthorize("@authService.hasAdminAuth(#userId)")
     @DeleteMapping("/{itemId}")
     fun deleteItem(
         @PathVariable itemId: Long,
