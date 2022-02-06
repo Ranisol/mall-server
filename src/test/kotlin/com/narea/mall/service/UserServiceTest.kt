@@ -33,13 +33,4 @@ class UserServiceTest(
         assertEquals(userRequest.email, user.email)
     }
 
-    @Test
-    fun `유저 여러개 생성`() {
-        val userRequests = listOf(
-            UserCreateRequest().apply { email = "a" },
-            UserCreateRequest().apply { email = "b" },
-            UserCreateRequest().apply { email = "c" }
-        )
-        userService.createUsers(userRequests)
-    }
 }
