@@ -25,13 +25,19 @@ class AuthService (
     private val userService: UserService
 ) {
     fun hasAuthByUserId(userId: Long): Boolean {
-        val authenticatedUser = userService.getUser(
-            SecurityContextHolder.getContext().authentication.name
-        )
+        val authenticatedUser = getAuthenticatedUser()
         if(authenticatedUser.role == Role.ADMIN) return true
         if(userId != authenticatedUser.id) throw ForbiddenException("userId $userId cannot access to userId${authenticatedUser.id}'s resource")
         return true
     }
+    fun hasAdminAuth(userId: Long): Boolean {
+        val authenticatedUser = getAuthenticatedUser()
+        if(authenticatedUser.role != Role.ADMIN) throw ForbiddenException("can access only admin user")
+        return true
+    }
+    fun getAuthenticatedUser(): com.narea.mall.entity.User =
+        userService.getUser(SecurityContextHolder.getContext().authentication.name)
+
     @Transactional
     fun login(loginRequest: LoginRequest): TokenResponse {
         val user = userService.getUser(loginRequest.email)

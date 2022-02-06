@@ -1,5 +1,6 @@
 package com.narea.mall.repository.custom
 
+import com.narea.mall.dto.ItemParams
 import com.narea.mall.dto.ItemResponse
 import com.narea.mall.entity.*
 import com.narea.mall.utils.EMPTY_STRING
@@ -11,9 +12,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
-data class ItemParams (
-    var itemName: String = EMPTY_STRING,
-)
+
 
 @Repository
 interface ItemRepositoryCustom {

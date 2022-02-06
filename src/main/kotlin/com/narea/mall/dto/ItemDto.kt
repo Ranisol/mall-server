@@ -5,6 +5,7 @@ import com.narea.mall.ResponseMapper
 import com.narea.mall.entity.Category
 import com.narea.mall.entity.Item
 import com.narea.mall.entity.ItemFile
+import com.narea.mall.utils.EMPTY_STRING
 import com.narea.mall.utils.NOT_BE_EMPTY
 import org.apache.commons.lang3.StringUtils
 import org.mapstruct.*
@@ -28,6 +29,11 @@ data class ItemUpdateRequest (
     var price: Int? = null,
     var inventory: Int? = null,
     var categories:List<Long>? = null,
+)
+
+data class ItemParams (
+    var itemName: String = EMPTY_STRING,
+    var categoryIds: List<Long>
 )
 
 // response

@@ -22,19 +22,18 @@ class OrderController(
     private val orderService: OrderService
 ) {
 
-    @Operation(summary = "주문 조회", description = "")
+    @Operation(summary = "유저별 주문 조회", description = "")
     @PreAuthorize("@authService.hasAuthByUserId(#userId)")
     @GetMapping("/{orderId}")
-    fun getOrder(
+    fun getUserOrder(
         @PathVariable userId: Long,
         @PathVariable orderId: Long
     ) = orderService.getOrder(orderId)
 
-
-    @Operation(summary = "주문 목록 조회", description = "")
+    @Operation(summary = "유저별 주문 목록 조회", description = "")
     @PreAuthorize("@authService.hasAuthByUserId(#userId)")
     @GetMapping
-    fun getOrders(
+    fun getUserOrders(
         @PathVariable userId: Long,
         @PageableDefault
         @Parameter(hidden = true)
@@ -59,15 +58,6 @@ class OrderController(
     ) = orderService.createOrder(userId, orderCreateRequest)
 
 
-   @Operation(summary = "주문 목록 삭제", description = "")
-   @PreAuthorize("@authService.hasAuthByUserId(#userId)")
-   @DeleteMapping("/{orderId}")
-   fun deleteOrder(
-       @PathVariable userId: Long,
-       @PathVariable orderId: Long
-   ) = orderService.deleteOrder(orderId)
-
-
     @Operation(summary = "주문 완료", description = "")
     @PreAuthorize("@authService.hasAuthByUserId(#userId)")
     @PutMapping("/{orderId}/complete")
@@ -84,11 +74,14 @@ class OrderController(
         @PathVariable orderId: Long
     ) = orderService.cancelOrder(orderId)
 
-    @Operation(summary = "주문 환불 완료", description = "")
-    @PreAuthorize("@authService.hasAuthByUserId(#userId)")
-    @PutMapping("/{orderId}/refund")
-    fun refundOrder(
-        @PathVariable userId: Long,
-        @PathVariable orderId: Long
-    ) = orderService.refundOrder(orderId)
+
+//    @Operation(summary = "주문 목록 삭제", description = "")
+//    @PreAuthorize("@authService.hasAdminAuth(#userId)")
+//    @DeleteMapping("/{orderId}")
+//    fun deleteOrder(
+//        @PathVariable userId: Long,
+//        @PathVariable orderId: Long
+//    ) = orderService.deleteOrder(orderId)
+
+
 }
