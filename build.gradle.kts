@@ -13,7 +13,6 @@ repositories {
 	mavenCentral()
 }
 group = "com.narea.mall"
-version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 val querydslVersion = "5.0.0"
 
@@ -109,5 +108,5 @@ tasks {
 val jar: Jar by tasks
 val bootJar: BootJar by tasks
 
-bootJar.enabled = false
+bootJar.enabled = true
 jar.enabled = true
