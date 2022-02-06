@@ -26,16 +26,20 @@ class OrderTest {
             item = item2,
             count = 5
         )
-        val order = Orders(
-            orderItems = arrayListOf(orderItem1, orderItem2)
-        )
+
     }
 
     @Test fun `test getTotalPrice`(){
+        val order = Orders(
+            orderItems = arrayListOf(orderItem1, orderItem2)
+        )
         assertEquals(20_000, order.getTotalPrice())
     }
 
     @Test fun `test order`(){
+        val order = Orders(
+            orderItems = arrayListOf(orderItem1, orderItem2)
+        )
         order.order()
         assertEquals(OrderStatus.ORDER, order.orderStatus)
         assertNotNull(order.delivery)
@@ -47,6 +51,9 @@ class OrderTest {
     }
 
     @Test fun `Can only be ordered when orderStatus is READY (1)`() {
+        val order = Orders(
+            orderItems = arrayListOf(orderItem1, orderItem2)
+        )
         assertThrows<BadRequestException> {
             // given
             order.order()
@@ -55,6 +62,9 @@ class OrderTest {
         }
     }
     @Test fun `Can only be ordered when orderStatus is READY (2)`() {
+        val order = Orders(
+            orderItems = arrayListOf(orderItem1, orderItem2)
+        )
         assertThrows<BadRequestException> {
             // given
             order.order()
@@ -64,6 +74,9 @@ class OrderTest {
         }
     }
     @Test fun `Can only be ordered when orderStatus is READY (3)`() {
+        val order = Orders(
+            orderItems = arrayListOf(orderItem1, orderItem2)
+        )
         assertThrows<BadRequestException> {
             // given
             order.order()
@@ -76,6 +89,9 @@ class OrderTest {
 
 
     @Test fun `test cancel`(){
+        val order = Orders(
+            orderItems = arrayListOf(orderItem1, orderItem2)
+        )
         order.order()
         order.cancel()
         assertEquals(OrderStatus.CANCEL, order.orderStatus)
@@ -87,12 +103,18 @@ class OrderTest {
     }
 
     @Test fun `Can only be cancelled when orderStatus is ORDER (1)`() {
+        val order = Orders(
+            orderItems = arrayListOf(orderItem1, orderItem2)
+        )
         assertThrows<BadRequestException> {
             // when
             order.cancel()
         }
     }
     @Test fun `Can only be cancelled when orderStatus is ORDER (2)`() {
+        val order = Orders(
+            orderItems = arrayListOf(orderItem1, orderItem2)
+        )
         assertThrows<BadRequestException> {
             // when
             order.order()
@@ -102,6 +124,9 @@ class OrderTest {
         }
     }
     @Test fun `Can only be cancelled when orderStatus is ORDER (3)`() {
+        val order = Orders(
+            orderItems = arrayListOf(orderItem1, orderItem2)
+        )
         assertThrows<BadRequestException> {
             // given
             order.order()
@@ -113,6 +138,9 @@ class OrderTest {
     }
 
     @Test fun `refund`(){
+        val order = Orders(
+            orderItems = arrayListOf(orderItem1, orderItem2)
+        )
         order.order()
         order.cancel()
         order.refund()

@@ -1,8 +1,7 @@
 package com.narea.mall.repository
 
+import com.narea.mall.dto.OrderParams
 import com.narea.mall.entity.*
-import com.narea.mall.repository.custom.OrderParams
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.springframework.beans.factory.annotation.Autowired
@@ -10,8 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.domain.PageRequest
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
 import kotlin.test.assertEquals
 
 
