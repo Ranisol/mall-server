@@ -5,7 +5,7 @@ phases:
     commands:
       - echo Build started on `date`
       - chmod +x ./gradlew
-      - ./gradlew build
+      - ./gradlew build --stacktrace
   post_build:
     commands:
       - echo Build completed on `date`
