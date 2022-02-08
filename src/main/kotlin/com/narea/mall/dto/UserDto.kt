@@ -36,6 +36,7 @@ data class UserResponse (
     var mobileNumber:String? = EMPTY_STRING,
     var role:String = Role.USER.toString(),
     var createDate: LocalDateTime? = null,
+    var basket: BasketResponse = BasketResponse()
 )
 
 
