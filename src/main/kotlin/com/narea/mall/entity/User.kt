@@ -1,5 +1,7 @@
 package com.narea.mall.entity
 import com.narea.mall.utils.EMPTY_STRING
+import org.apache.commons.lang3.StringUtils
+import java.time.LocalDateTime
 import javax.persistence.*
 
 

@@ -11,4 +11,5 @@ class WebConfig : WebMvcConfigurer {
             .order(1)
             .addPathPatterns("/**")
     }
+
 }

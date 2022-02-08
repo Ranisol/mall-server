@@ -1,5 +1,9 @@
 package com.narea.mall.entity
 
+import com.narea.mall.utils.EMPTY_STRING
+import java.time.LocalDateTime
+import javax.persistence.*
+
 /** 쿠폰 보류, 추후 필요시 구현 */
 //enum class CouponType(label: String) {
 //    SPECIFIC("특정 아이템"), OVERALL("모든 아이템")

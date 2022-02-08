@@ -1,9 +1,8 @@
 package com.narea.mall.entity
 
 import com.narea.mall.utils.EMPTY_STRING
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
+import javax.persistence.*
+
 
 
 @Table
