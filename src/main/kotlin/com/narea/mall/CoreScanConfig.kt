@@ -1,6 +1,5 @@
 package com.narea.mall
 
-import com.narea.mall.auth.AUTHORIZATION_HEADER
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
@@ -19,7 +18,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
     servers = [Server(url = "/")]
 )
 @SecurityScheme(
-    name = AUTHORIZATION_HEADER,
     type = SecuritySchemeType.APIKEY,
     `in` = SecuritySchemeIn.HEADER
 )

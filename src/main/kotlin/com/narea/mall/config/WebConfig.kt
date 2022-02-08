@@ -11,10 +11,4 @@ class WebConfig : WebMvcConfigurer {
             .order(1)
             .addPathPatterns("/**")
     }
-//    override fun addInterceptors(registry){
-//        registry.addInterceptor(MyInterceptor())
-//            .order(1)
-//            .addPathPatterns("/**")
-//        //.excludePathPatterns("/**")
-//    }
 }
