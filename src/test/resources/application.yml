@@ -1,0 +1,40 @@
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+      generate-ddl: false
+      show-sql: true
+      properties:
+        hibernamte:
+          SQL: DEBUG
+          format_sql: true
+          dialect: org.hibernate.dialect.PostgreSQLDialect
+          default_batch_fetch_size: 1000
+          type:
+            descriptor:
+              sql: trace
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 30MB
+
+
+jwt:
+  secret: fdjfkljfklewji7897897890899890909756756456453378678545490890
+# AWS bucket
+cloud:
+  aws:
+    stack:
+      auto: false
+    credentials:
+      access-key:
+      secret-key:
+    region:
+      static: ap-northeast-2
+
+narea-mall:
+  aws:
+    s3:
+      bucketName: narea-mall-develop

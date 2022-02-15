@@ -1,0 +1,1 @@
+web: java -jar mall.jar -Xms512m -Xmx512m -Xss512k -XX:NewRatio=1 -XX:SurvivorRatio=6 -XX:+UseParallelGC -XX:+UseParallelOldGC -Dsun.net.inetaddr.ttl=0 -Dnetworkaddress.cache.ttl=0 -Dfile.encoding=UTF-8 -Dlog4j2.formatMsgNoLookups=true
