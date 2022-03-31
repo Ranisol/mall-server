@@ -51,18 +51,16 @@ class UserService(
         return userRepository.saveAll(
             userCreateRequests.map { request -> request.toEntity() }
         ).map { user -> user.toResponse() }
-
     }
 
     @Transactional
     fun updateUser(userId: Long, userUpdateRequest: UserUpdateRequest): UserResponse {
-        val user = userRepository.findByIdOrNull(userId) ?: throw NotFoundException("user not exist")
-        return user.apply {
+        val user = getUser(userId)
+
+        return getUser(userId).apply {
             name = userUpdateRequest.name ?: name
             mobileNumber = userUpdateRequest.mobileNumber ?: mobileNumber
-            password =
-                userUpdateRequest.password ?: password
-                if (userUpdateRequest.password != null) passwordEncoder.encode(password) else password
+            password = if(userUpdateRequest.password != null) passwordEncoder.encode(password) else password
         }.toResponse()
     }
 
